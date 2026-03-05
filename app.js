@@ -148,7 +148,6 @@ function switchTab(tab) {
 
 tabMyPastes.addEventListener('click', () => switchTab('list'));
 
-// THIS ALWAYS FORCES "ADD TO DATABASE" STATE
 function openEditorInAddMode() {
     editorTitle.innerText = "Add New App";
     saveBtn.innerText = "Add to Database"; 
@@ -271,7 +270,7 @@ function attachCardListeners() {
         });
     });
 
-    // THIS ALWAYS FORCES "UPDATE DATABASE" STATE
+    // EDIT BUTTON SMART LOADING
     document.querySelectorAll('.btn-edit').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const id = e.target.dataset.id;
@@ -286,7 +285,13 @@ function attachCardListeners() {
 
             get(ref(db, `api_data/${currentUserUid}/${id}`)).then((snapshot) => {
                 if(snapshot.exists()) {
-                    jsonInputArea.value = JSON.stringify(snapshot.val(), null, 2);
+                    const data = snapshot.val();
+                    // SMART DISPLAY: If it's a JSON object, format it beautifully. If it's raw text, paste it exactly as is.
+                    if (typeof data === 'object' && data !== null) {
+                        jsonInputArea.value = JSON.stringify(data, null, 2);
+                    } else {
+                        jsonInputArea.value = data; 
+                    }
                     setTimeout(autoResizeTextarea, 50);
                 }
             });
@@ -294,7 +299,7 @@ function attachCardListeners() {
     });
 }
 
-// --- Save Logic ---
+// --- Save Logic (Smart Any-Text Saver) ---
 saveBtn.addEventListener('click', () => {
     const appName = appNameInput.value.trim();
     const rawJson = jsonInputArea.value;
@@ -309,41 +314,40 @@ saveBtn.addEventListener('click', () => {
         return triggerErrorShake(appNameInput);
     }
 
+    let payloadToSave;
+
+    // THE PASTEBIN FIX: Try to save as structured JSON. If the user pasted raw text, catch the error and save it as raw text!
     try {
-        const parsedJson = JSON.parse(rawJson); 
-        const charCount = JSON.stringify(parsedJson).length; 
-        
-        saveBtn.innerText = isEditMode ? "Updating..." : "Adding...";
-        
-        const currentDate = new Date().toLocaleString('en-IN', {
-            day: '2-digit', month: '2-digit', year: 'numeric',
-            hour: '2-digit', minute: '2-digit'
-        });
-
-        const updates = {};
-        updates[`api_data/${currentUserUid}/${appName}`] = parsedJson;
-        updates[`api_metadata/${currentUserUid}/${appName}/updatedAt`] = currentDate;
-        updates[`api_metadata/${currentUserUid}/${appName}/chars`] = charCount;
-        
-        get(ref(db, `api_metadata/${currentUserUid}/${appName}/views`)).then((snapshot) => {
-            if (!snapshot.exists()) updates[`api_metadata/${currentUserUid}/${appName}/views`] = 0;
-            
-            update(ref(db), updates).then(() => {
-                showToast(isEditMode ? "Database Updated!" : "Added to Database!", "success");
-                // Immediately fix string text
-                saveBtn.innerText = isEditMode ? "Update Database" : "Add to Database";
-                switchTab('list'); 
-            }).catch(error => {
-                showToast("Database Error", "error");
-                saveBtn.innerText = isEditMode ? "Update Database" : "Add to Database";
-            });
-        });
-
+        payloadToSave = JSON.parse(rawJson); 
     } catch (e) {
-        showToast("Invalid JSON syntax. Check brackets.", "error");
-        triggerErrorShake(jsonInputArea);
-        saveBtn.innerText = isEditMode ? "Update Database" : "Add to Database";
+        payloadToSave = rawJson; // User typed raw text/code
     }
+
+    const charCount = rawJson.length; 
+    saveBtn.innerText = isEditMode ? "Updating..." : "Adding...";
+    
+    const currentDate = new Date().toLocaleString('en-IN', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+    });
+
+    const updates = {};
+    updates[`api_data/${currentUserUid}/${appName}`] = payloadToSave;
+    updates[`api_metadata/${currentUserUid}/${appName}/updatedAt`] = currentDate;
+    updates[`api_metadata/${currentUserUid}/${appName}/chars`] = charCount;
+    
+    get(ref(db, `api_metadata/${currentUserUid}/${appName}/views`)).then((snapshot) => {
+        if (!snapshot.exists()) updates[`api_metadata/${currentUserUid}/${appName}/views`] = 0;
+        
+        update(ref(db), updates).then(() => {
+            showToast(isEditMode ? "Database Updated!" : "Added to Database!", "success");
+            saveBtn.innerText = isEditMode ? "Update Database" : "Add to Database";
+            switchTab('list'); 
+        }).catch(error => {
+            showToast("Database Error", "error");
+            saveBtn.innerText = isEditMode ? "Update Database" : "Add to Database";
+        });
+    });
 });
 
 // --- Login / Logout ---
