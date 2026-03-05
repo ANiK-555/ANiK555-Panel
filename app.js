@@ -3,14 +3,14 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from
 import { getDatabase, ref, get, set, update, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyArszMEjIo1GjU27fSTOI8aRUZxTwubTWI",
-  authDomain: "anik555.firebaseapp.com",
-  databaseURL: "https://anik555-default-rtdb.firebaseio.com",
-  projectId: "anik555",
-  storageBucket: "anik555.firebasestorage.app",
-  messagingSenderId: "326115325889",
-  appId: "1:326115325889:web:a96a2f6b209b98d1cc6140",
-  measurementId: "G-LRZV6C0Z8W"
+  apiKey: "AIzaSyCYuvJy2B54DCF0XfjP0nkLKBrxDnR5S28",
+  authDomain: "gamer-aadil.firebaseapp.com",
+  databaseURL: "https://gamer-aadil.firebaseio.com",
+  projectId: "gamer-aadil",
+  storageBucket: "gamer-aadil.firebasestorage.app",
+  messagingSenderId: "420652281966",
+  appId: "1:420652281966:web:4867f1a0a767a9e46af67f",
+  measurementId: "G-XKLJ4RH5D2"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -270,7 +270,6 @@ function attachCardListeners() {
         });
     });
 
-    // EDIT BUTTON SMART LOADING
     document.querySelectorAll('.btn-edit').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const id = e.target.dataset.id;
@@ -286,7 +285,6 @@ function attachCardListeners() {
             get(ref(db, `api_data/${currentUserUid}/${id}`)).then((snapshot) => {
                 if(snapshot.exists()) {
                     const data = snapshot.val();
-                    // SMART DISPLAY: If it's a JSON object, format it beautifully. If it's raw text, paste it exactly as is.
                     if (typeof data === 'object' && data !== null) {
                         jsonInputArea.value = JSON.stringify(data, null, 2);
                     } else {
@@ -299,9 +297,9 @@ function attachCardListeners() {
     });
 }
 
-// --- Save Logic (Smart Any-Text Saver) ---
+// --- Save Logic (WITH SMART SANITIZER) ---
 saveBtn.addEventListener('click', () => {
-    const appName = appNameInput.value.trim();
+    let appName = appNameInput.value.trim();
     const rawJson = jsonInputArea.value;
     const isEditMode = appNameInput.disabled; 
 
@@ -309,14 +307,18 @@ saveBtn.addEventListener('click', () => {
         showToast("App Name is required", "error");
         return triggerErrorShake(appNameInput);
     }
-    if (/[.#$\[\]]/.test(appName)) {
-        showToast("Invalid characters in App Name", "error");
-        return triggerErrorShake(appNameInput);
+
+    // THE FIX: Automatically safely formats characters that crash Firebase instead of throwing an error.
+    // Replaces periods (.), hashes (#), dollar signs ($), and brackets ([, ]) with hyphens (-).
+    const safeAppName = appName.replace(/[.#$\[\]]/g, '-');
+    
+    if (appName !== safeAppName) {
+        appNameInput.value = safeAppName;
+        appName = safeAppName;
+        showToast("Auto-formatted invalid characters!", "success");
     }
 
     let payloadToSave;
-
-    // THE PASTEBIN FIX: Try to save as structured JSON. If the user pasted raw text, catch the error and save it as raw text!
     try {
         payloadToSave = JSON.parse(rawJson); 
     } catch (e) {
