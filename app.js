@@ -3,15 +3,16 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from
 import { getDatabase, ref, get, set, update, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCYuvJy2B54DCF0XfjP0nkLKBrxDnR5S28",
-  authDomain: "gamer-aadil.firebaseapp.com",
-  databaseURL: "https://gamer-aadil.firebaseio.com",
-  projectId: "gamer-aadil",
-  storageBucket: "gamer-aadil.firebasestorage.app",
-  messagingSenderId: "420652281966",
-  appId: "1:420652281966:web:4867f1a0a767a9e46af67f",
-  measurementId: "G-XKLJ4RH5D2"
+  apiKey: "AIzaSyArszMEjIo1GjU27fSTOI8aRUZxTwubTWI",
+  authDomain: "anik555.firebaseapp.com",
+  databaseURL: "https://anik555-default-rtdb.firebaseio.com",
+  projectId: "anik555",
+  storageBucket: "anik555.firebasestorage.app",
+  messagingSenderId: "326115325889",
+  appId: "1:326115325889:web:a96a2f6b209b98d1cc6140",
+  measurementId: "G-LRZV6C0Z8W"
 };
+
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -308,8 +309,7 @@ saveBtn.addEventListener('click', () => {
         return triggerErrorShake(appNameInput);
     }
 
-    // THE FIX: Automatically safely formats characters that crash Firebase instead of throwing an error.
-    // Replaces periods (.), hashes (#), dollar signs ($), and brackets ([, ]) with hyphens (-).
+    // AUTO-SANITIZER: Automatically converts invalid characters (. # $ [ ]) to hyphens (-) so Firebase doesn't crash.
     const safeAppName = appName.replace(/[.#$\[\]]/g, '-');
     
     if (appName !== safeAppName) {
@@ -352,9 +352,9 @@ saveBtn.addEventListener('click', () => {
     });
 });
 
-// --- Login / Logout ---
+// --- Login / Logout (Smarter Errors) ---
 document.getElementById('loginBtn').addEventListener('click', () => {
-    const email = document.getElementById('email').value;
+    const email = document.getElementById('email').value.trim();
     const p = document.getElementById('password').value;
     
     if(!email || !p) return showToast("Enter credentials", "error");
@@ -364,7 +364,9 @@ document.getElementById('loginBtn').addEventListener('click', () => {
     
     signInWithEmailAndPassword(auth, email, p).catch(err => {
         loadingScreen.classList.add('hidden'); 
-        showToast("Invalid login credentials", "error");
+        // Shows the EXACT error reason instead of a generic one
+        let cleanError = err.message.replace("Firebase: ", "");
+        showToast(cleanError, "error");
     });
 });
 
