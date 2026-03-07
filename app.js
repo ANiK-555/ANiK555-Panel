@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebas
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { getDatabase, ref, get, set, update, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
+// Your exact Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyArszMEjIo1GjU27fSTOI8aRUZxTwubTWI",
   authDomain: "anik555.firebaseapp.com",
@@ -12,7 +13,6 @@ const firebaseConfig = {
   appId: "1:326115325889:web:a96a2f6b209b98d1cc6140",
   measurementId: "G-LRZV6C0Z8W"
 };
-
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -203,7 +203,10 @@ function renderCards(data) {
     keys.forEach((key, index) => {
         const item = data[key];
         const dbUrl = firebaseConfig.databaseURL.replace(/\/$/, ""); 
-        const rawUrl = `${dbUrl}/api_data/${currentUserUid}/${key}.json`;
+        
+        // FIX: encodeURIComponent makes sure any spaces or weird characters in existing links work properly in the browser
+        const safeKey = encodeURIComponent(key);
+        const rawUrl = `${dbUrl}/api_data/${currentUserUid}/${safeKey}.json`;
 
         const card = document.createElement('div');
         card.className = 'card glass animate-view';
@@ -309,13 +312,13 @@ saveBtn.addEventListener('click', () => {
         return triggerErrorShake(appNameInput);
     }
 
-    // AUTO-SANITIZER: Automatically converts invalid characters (. # $ [ ]) to hyphens (-) so Firebase doesn't crash.
-    const safeAppName = appName.replace(/[.#$\[\]]/g, '-');
+    // AUTO-SANITIZER: Automatically converts invalid characters (. # $ [ ]) AND spaces to clean hyphens (-)
+    const safeAppName = appName.replace(/[.#$\[\]]/g, '-').replace(/\s+/g, '-');
     
-    if (appName !== safeAppName) {
+    if (appName !== safeAppName && !isEditMode) {
         appNameInput.value = safeAppName;
         appName = safeAppName;
-        showToast("Auto-formatted invalid characters!", "success");
+        showToast("Spaces & special chars auto-formatted to dashes!", "success");
     }
 
     let payloadToSave;
@@ -364,7 +367,6 @@ document.getElementById('loginBtn').addEventListener('click', () => {
     
     signInWithEmailAndPassword(auth, email, p).catch(err => {
         loadingScreen.classList.add('hidden'); 
-        // Shows the EXACT error reason instead of a generic one
         let cleanError = err.message.replace("Firebase: ", "");
         showToast(cleanError, "error");
     });
@@ -375,3 +377,4 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
     loadingScreen.style.opacity = '1';
     signOut(auth); 
 });
+                               
