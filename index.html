@@ -257,7 +257,6 @@ body {
   background: color-mix(in srgb, var(--surface-container) 90%, transparent);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--outline-variant);
   transition: background var(--dur-med) var(--standard);
 }
 .top-bar-title {
@@ -369,20 +368,25 @@ body {
 .day-night-btn:hover { transform: scale(1.15); background: rgba(0,0,0,0.4); }
 .day-night-btn .material-icons-round { font-size: 1.1rem; }
 
-/* ─── Color Palette Button ─── */
+/* ─── Color Palette Button (Material You tonal) ─── */
 .palette-btn {
-  width: 36px; height: 36px;
+  width: 40px; height: 40px;
   border-radius: var(--r-full);
-  border: 1.5px solid rgba(255,255,255,0.15);
-  background: rgba(0,0,0,0.25);
-  background-image: conic-gradient(#ef4444, #f97316, #eab308, #10b981, #38bdf8, #a855f7, #ec4899, #ef4444);
+  border: none;
+  background: color-mix(in srgb, var(--primary) 18%, rgba(0,0,0,0.2));
+  color: var(--on-primary-container);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   transition: all 250ms var(--spring);
-  position: relative;
   flex-shrink: 0;
+  position: relative;
 }
-.palette-btn:hover { transform: scale(1.15) rotate(30deg); }
+.palette-btn:hover {
+  background: color-mix(in srgb, var(--primary) 30%, rgba(0,0,0,0.15));
+  transform: scale(1.08);
+}
+.palette-btn:active { transform: scale(0.95); }
+.palette-btn .material-icons-round { font-size: 1.25rem; }
 .palette-btn-wrap { position: relative; }
 
 /* ─── Profile Chip ─── */
@@ -471,6 +475,18 @@ body {
   font-family: 'Google Sans', sans-serif; font-size: 1rem;
 }
 .search-wrap input::placeholder { color: var(--on-surface-variant); }
+.search-refresh-btn {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border-radius: var(--r-full);
+  border: none;
+  background: color-mix(in srgb, var(--primary) 15%, transparent);
+  color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all var(--dur-short) var(--standard);
+}
+.search-refresh-btn:hover { background: color-mix(in srgb, var(--primary) 25%, transparent); transform: rotate(30deg); }
+.search-refresh-btn .material-icons-round { font-size: 1.1rem; }
 .total-badge {
   background: var(--secondary-container);
   color: var(--on-secondary-container, var(--on-surface-variant));
@@ -759,11 +775,6 @@ body {
 <!-- TOP APP BAR -->
 <div class="top-bar" id="topBar" style="display:none">
   <span class="top-bar-title">Paste Manager</span>
-  <div style="display:flex;gap:4px;align-items:center">
-    <button class="icon-btn ripple-surface squiggle" onclick="refreshApps()" title="Refresh">
-      <span class="material-icons-round">refresh</span>
-    </button>
-  </div>
 </div>
 
 <div class="container">
@@ -797,7 +808,9 @@ body {
           </button>
           <!-- Color Theme Picker -->
           <div class="palette-btn-wrap">
-            <button class="palette-btn ripple-surface squiggle" id="paletteBtn" title="Change Color Theme"></button>
+            <button class="palette-btn ripple-surface squiggle" id="paletteBtn" title="Change Color Theme">
+              <span class="material-icons-round">palette</span>
+            </button>
             <div id="themePopup">
               <span class="theme-dot active" data-color="blue"></span>
               <span class="theme-dot" data-color="red"></span>
@@ -839,6 +852,9 @@ body {
         <span class="material-icons-round">search</span>
         <input type="search" id="searchInput" placeholder="Search pastes...">
         <span class="total-badge" id="totalCount">Total: 0</span>
+        <button class="search-refresh-btn ripple-surface squiggle" onclick="refreshApps()" title="Refresh">
+          <span class="material-icons-round">refresh</span>
+        </button>
       </div>
       <div class="cards-grid" id="cardsGrid"></div>
     </div>
