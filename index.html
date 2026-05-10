@@ -4,16 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Paste Manager</title>
-<!-- Preload critical resources for faster loading -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Display:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" media="print" onload="this.media='all'">
-<!-- Noscript fallback for fonts -->
-<noscript>
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Display:wght@400;500;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-</noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Display:wght@400;500;700&display=swap&display=swap">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Display:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 
 <style>
 /* ═══════════════════════════════════════
@@ -70,84 +66,103 @@
   --r-full: 9999px;
 }
 
-/* ─── RED THEME ─── */
-[data-theme="red"] {
-  --seed: #ef4444;
-  --seed-rgb: 239,68,68;
-  --primary: #FFB3B0;
-  --on-primary: #680003;
-  --primary-container: #930007;
-  --on-primary-container: #FFDAD8;
-  --secondary-container: #5A3535;
-  --outline-variant: #4F3E3E;
-  --bg: #180D0D; --surface: #180D0D;
-  --surface-container: #241818;
-  --surface-container-high: #2F2222;
-  --surface-container-highest: #3A2C2C;
+/* ─── ORANGE THEME ─── */
+[data-theme="orange"] {
+  --seed: #f97316; --seed-rgb: 249,115,22;
+  --primary: #FFB77A; --on-primary: #4A1800;
+  --primary-container: #6D2A00; --on-primary-container: #FFDBC8;
+  --secondary-container: #5A4535; --outline-variant: #4F3E30;
+  --bg: #181008; --surface: #181008;
+  --surface-container: #241A10; --surface-container-high: #2F221A; --surface-container-highest: #3A2C22;
 }
-/* ─── PINK THEME ─── */
-[data-theme="pink"] {
-  --seed: #ec4899;
-  --seed-rgb: 236,72,153;
-  --primary: #FFB0CB;
-  --on-primary: #64003B;
-  --primary-container: #8F0055;
-  --on-primary-container: #FFD9E5;
-  --secondary-container: #5A3548;
-  --outline-variant: #4F3E47;
-  --bg: #180D13; --surface: #180D13;
-  --surface-container: #241820;
-  --surface-container-high: #2F222B;
-  --surface-container-highest: #3A2C36;
+/* ─── PURPLE THEME ─── */
+[data-theme="purple"] {
+  --seed: #a855f7; --seed-rgb: 168,85,247;
+  --primary: #D4AAFF; --on-primary: #3D0070;
+  --primary-container: #59009D; --on-primary-container: #EEDCFF;
+  --secondary-container: #4A3566; --outline-variant: #453558;
+  --bg: #110D18; --surface: #110D18;
+  --surface-container: #1D1826; --surface-container-high: #272032; --surface-container-highest: #322A3D;
 }
-/* ─── GREEN THEME ─── */
-[data-theme="green"] {
-  --seed: #10b981;
-  --seed-rgb: 16,185,129;
-  --primary: #6CDBAE;
-  --on-primary: #003826;
-  --primary-container: #005138;
-  --on-primary-container: #89F8C9;
-  --secondary-container: #35504A;
-  --outline-variant: #3F4F4A;
-  --bg: #0D1812; --surface: #0D1812;
-  --surface-container: #182420;
-  --surface-container-high: #222F2A;
-  --surface-container-highest: #2C3A35;
+/* ─── YELLOW THEME ─── */
+[data-theme="yellow"] {
+  --seed: #eab308; --seed-rgb: 234,179,8;
+  --primary: #F5DA6A; --on-primary: #3A2D00;
+  --primary-container: #544300; --on-primary-container: #FFF0A0;
+  --secondary-container: #4A4530; --outline-variant: #4A4020;
+  --bg: #161300; --surface: #161300;
+  --surface-container: #221F00; --surface-container-high: #2D2A00; --surface-container-highest: #383400;
 }
-/* ─── DARK/NIGHT THEME ─── */
-[data-theme="dark"] {
-  --seed: #8B8FA8;
-  --seed-rgb: 139,143,168;
-  --primary: #C5C8E0;
-  --on-primary: #2C2F45;
-  --primary-container: #3F4258;
-  --on-primary-container: #E1E3F5;
-  --secondary-container: #3A3C4E;
-  --outline-variant: #454760;
-  --bg: #080A10; --surface: #080A10;
-  --surface-container: #12141E;
-  --surface-container-high: #1C1E2A;
-  --surface-container-highest: #262835;
+/* ─── CYAN THEME ─── */
+[data-theme="cyan"] {
+  --seed: #06b6d4; --seed-rgb: 6,182,212;
+  --primary: #6DDDEE; --on-primary: #003640;
+  --primary-container: #004F5C; --on-primary-container: #A0EEFA;
+  --secondary-container: #354A50; --outline-variant: #3A4A50;
+  --bg: #080F12; --surface: #080F12;
+  --surface-container: #121C20; --surface-container-high: #1C262A; --surface-container-highest: #263035;
 }
-/* ─── LIGHT/DAY THEME ─── */
-[data-theme="light"] {
-  --seed: #2563EB;
-  --seed-rgb: 37,99,235;
-  --primary: #1D4ED8;
-  --on-primary: #FFFFFF;
-  --primary-container: #DBEAFE;
-  --on-primary-container: #1E3A8A;
-  --secondary-container: #E0E7FF;
-  --outline-variant: #C7D2FE;
-  --bg: #F8FAFC; --surface: #F8FAFC;
-  --surface-container: #EFF2F8;
-  --surface-container-low: #F5F7FC;
-  --surface-container-high: #E4E8F3;
-  --surface-container-highest: #D8DDED;
-  --on-surface: #1E293B;
-  --on-surface-variant: #475569;
-  --outline: #94A3B8;
+
+/* ─── DAY MODE (light) ─── */
+[data-mode="day"] {
+  --bg: #F0F4F8; --surface: #F0F4F8;
+  --surface-container-lowest: #FFFFFF;
+  --surface-container-low: #E8EDF3;
+  --surface-container: #E0E8F0;
+  --surface-container-high: #D4DCE8;
+  --surface-container-highest: #C8D4E4;
+  --on-surface: #1A2230;
+  --on-surface-variant: #3A4A5A;
+  --outline: #7A8A9A;
+  --outline-variant: #B0BEC8;
+  --on-bg: #1A2230;
+  --scrim: rgba(0,0,0,0.35);
+}
+[data-mode="day"][data-theme="blue"] {
+  --primary: #0070B8; --on-primary: #FFFFFF;
+  --primary-container: #B8DCFF; --on-primary-container: #00213A;
+}
+[data-mode="day"][data-theme="red"] {
+  --primary: #B00010; --on-primary: #FFFFFF;
+  --primary-container: #FFDAD8; --on-primary-container: #410002;
+  --bg: #FFF0F0; --surface: #FFF0F0;
+  --surface-container: #F8E8E8; --surface-container-high: #F0DCDC; --surface-container-highest: #E8D0D0;
+}
+[data-mode="day"][data-theme="green"] {
+  --primary: #006C47; --on-primary: #FFFFFF;
+  --primary-container: #ADFCD5; --on-primary-container: #002114;
+  --bg: #F0FFF7; --surface: #F0FFF7;
+  --surface-container: #E0F8EC; --surface-container-high: #D0EEE0; --surface-container-highest: #C0E4D4;
+}
+[data-mode="day"][data-theme="pink"] {
+  --primary: #9C0060; --on-primary: #FFFFFF;
+  --primary-container: #FFD9E5; --on-primary-container: #3E001D;
+  --bg: #FFF0F6; --surface: #FFF0F6;
+  --surface-container: #F8E4EF; --surface-container-high: #F0D8E6; --surface-container-highest: #E8CCDB;
+}
+[data-mode="day"][data-theme="orange"] {
+  --primary: #8B3A00; --on-primary: #FFFFFF;
+  --primary-container: #FFDBC8; --on-primary-container: #2D0F00;
+  --bg: #FFF8F4; --surface: #FFF8F4;
+  --surface-container: #F8EDE4; --surface-container-high: #EEE0D4; --surface-container-highest: #E4D2C4;
+}
+[data-mode="day"][data-theme="purple"] {
+  --primary: #6A00C0; --on-primary: #FFFFFF;
+  --primary-container: #EEDCFF; --on-primary-container: #230048;
+  --bg: #F8F0FF; --surface: #F8F0FF;
+  --surface-container: #EEE4FF; --surface-container-high: #E4D8F8; --surface-container-highest: #D8CCF0;
+}
+[data-mode="day"][data-theme="yellow"] {
+  --primary: #6B5500; --on-primary: #FFFFFF;
+  --primary-container: #FFF0A0; --on-primary-container: #211900;
+  --bg: #FFFFF0; --surface: #FFFFF0;
+  --surface-container: #F8F8E0; --surface-container-high: #EEEEC8; --surface-container-highest: #E4E4B8;
+}
+[data-mode="day"][data-theme="cyan"] {
+  --primary: #006C80; --on-primary: #FFFFFF;
+  --primary-container: #A0EEFA; --on-primary-container: #001F26;
+  --bg: #F0FEFF; --surface: #F0FEFF;
+  --surface-container: #E0F8FC; --surface-container-high: #D0ECEF; --surface-container-highest: #C0E0E5;
 }
 
 /* ═══════════════════════════════════════
@@ -156,7 +171,20 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 *:focus { outline: none !important; }
 
-/* Disable text selection globally, allow only inside cards/boxes */
+/* Disable text selection & zoom globally */
+body, html {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  touch-action: pan-x pan-y;
+}
+/* Allow copy only inside card boxes */
+.card {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  user-select: text;
+}
+
 body {
   font-family: 'Google Sans', system-ui, sans-serif;
   background: var(--bg);
@@ -164,23 +192,8 @@ body {
   min-height: 100dvh;
   overflow-x: hidden;
   transition: background var(--dur-long) var(--standard), color var(--dur-med) var(--standard);
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
-  touch-action: pan-y;
-}
-
-/* Allow selection + copy only inside cards */
-.card, .card * {
-  user-select: text;
-  -webkit-user-select: text;
-  -webkit-touch-callout: default;
-}
-
-/* Disable zoom on inputs */
-input, textarea, select {
-  font-size: 16px !important;
-  touch-action: manipulation;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeSpeed;
 }
 
 /* particles */
@@ -213,21 +226,20 @@ input, textarea, select {
 .squiggle:active { animation: squiggle 420ms var(--spring); }
 
 /* ═══════════════════════════════════════
-   LOADING SCREEN — instant hide after auth
+   LOADING SCREEN
 ═══════════════════════════════════════ */
 #loadingScreen {
   position: fixed; inset: 0; z-index: 9999;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
   background: var(--bg);
-  transition: opacity 250ms var(--ease-in);
-  will-change: opacity;
+  transition: opacity var(--dur-med) var(--ease-in);
 }
 .m3-spinner {
   width: 48px; height: 48px;
   border: 4px solid var(--surface-container-highest);
   border-top-color: var(--primary);
   border-radius: 50%;
-  animation: spin 700ms linear infinite;
+  animation: spin 900ms linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 #loadingScreen p {
@@ -241,7 +253,7 @@ input, textarea, select {
 .top-bar {
   position: sticky; top: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 12px;
+  padding: 12px 16px;
   background: color-mix(in srgb, var(--surface-container) 90%, transparent);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -253,15 +265,12 @@ input, textarea, select {
   font-size: 1.35rem; font-weight: 700;
   color: var(--on-surface); letter-spacing: -0.01em;
 }
-.top-bar-actions {
-  display: flex; gap: 2px; align-items: center;
-}
 
 /* ═══════════════════════════════════════
    ICON BUTTON
 ═══════════════════════════════════════ */
 .icon-btn {
-  width: 44px; height: 44px;
+  width: 48px; height: 48px;
   border-radius: var(--r-full);
   border: none; background: transparent;
   color: var(--on-surface-variant);
@@ -270,102 +279,7 @@ input, textarea, select {
   transition: background var(--dur-short) var(--standard);
 }
 .icon-btn:hover { background: color-mix(in srgb, var(--on-surface) 8%, transparent); }
-.icon-btn .material-icons-round { font-size: 1.25rem; }
-
-/* Day/Night toggle button */
-.icon-btn.daynight-btn .material-icons-round {
-  transition: transform 400ms var(--spring), color 200ms;
-}
-[data-theme="light"] .icon-btn.daynight-btn .material-icons-round {
-  color: #F59E0B;
-}
-
-/* ─── Color Theme Picker Button ─── */
-.theme-picker-btn {
-  width: 44px; height: 44px;
-  border-radius: var(--r-full);
-  border: none;
-  background: conic-gradient(from 0deg, #38bdf8, #ec4899, #ef4444, #10b981, #38bdf8);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 0 0 2px var(--outline-variant), 0 0 12px rgba(var(--seed-rgb),0.35);
-  transition: transform 300ms var(--spring), box-shadow 200ms;
-  position: relative;
-}
-.theme-picker-btn:hover { transform: scale(1.12) rotate(15deg); box-shadow: 0 0 0 2px var(--primary), 0 0 18px rgba(var(--seed-rgb),0.5); }
-.theme-picker-btn::after {
-  content: '';
-  position: absolute; inset: 4px;
-  background: var(--surface-container);
-  border-radius: 50%;
-}
-
-/* ─── Color Theme Sheet / Bottom Sheet ─── */
-.theme-sheet-overlay {
-  position: fixed; inset: 0; z-index: 500;
-  background: var(--scrim);
-  opacity: 0; pointer-events: none;
-  transition: opacity 250ms var(--standard);
-}
-.theme-sheet-overlay.open {
-  opacity: 1; pointer-events: all;
-}
-.theme-sheet {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 501;
-  background: var(--surface-container-high);
-  border-top: 1px solid var(--outline-variant);
-  border-radius: 28px 28px 0 0;
-  padding: 12px 24px 32px;
-  transform: translateY(100%);
-  transition: transform 380ms var(--spring);
-  max-width: 520px; margin: 0 auto;
-  box-shadow: 0 -8px 40px rgba(0,0,0,0.5);
-}
-.theme-sheet.open { transform: translateY(0); }
-.theme-sheet-handle {
-  width: 36px; height: 4px; border-radius: var(--r-full);
-  background: var(--outline-variant);
-  margin: 0 auto 20px;
-}
-.theme-sheet-title {
-  font-family: 'Google Sans Display', sans-serif;
-  font-size: 1.1rem; font-weight: 700;
-  color: var(--on-surface);
-  margin-bottom: 18px;
-  display: flex; align-items: center; gap: 8px;
-}
-.theme-sheet-title .material-icons-round { color: var(--primary); font-size: 1.2rem; }
-.theme-options-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-}
-.theme-option-btn {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  padding: 14px 8px;
-  border-radius: var(--r-xl);
-  border: 2px solid transparent;
-  background: var(--surface-container);
-  cursor: pointer;
-  transition: all 250ms var(--spring);
-  font-family: 'Google Sans', sans-serif;
-  font-size: 0.75rem; font-weight: 600;
-  color: var(--on-surface-variant);
-}
-.theme-option-btn:hover { transform: translateY(-2px); background: var(--surface-container-highest); }
-.theme-option-btn.active {
-  border-color: var(--primary);
-  background: color-mix(in srgb, var(--primary) 12%, var(--surface-container));
-  color: var(--primary);
-}
-.theme-option-swatch {
-  width: 36px; height: 36px; border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.15);
-}
-.theme-option-btn[data-theme="blue"] .theme-option-swatch { background: linear-gradient(135deg, #38bdf8, #0ea5e9); }
-.theme-option-btn[data-theme="red"] .theme-option-swatch { background: linear-gradient(135deg, #ef4444, #dc2626); }
-.theme-option-btn[data-theme="pink"] .theme-option-swatch { background: linear-gradient(135deg, #ec4899, #db2777); }
-.theme-option-btn[data-theme="green"] .theme-option-swatch { background: linear-gradient(135deg, #10b981, #059669); }
-.theme-option-btn[data-theme="dark"] .theme-option-swatch { background: linear-gradient(135deg, #1e1e2e, #11111b); }
-.theme-option-btn[data-theme="light"] .theme-option-swatch { background: linear-gradient(135deg, #dbeafe, #eff6ff); border-color: #93c5fd; }
+.icon-btn .material-icons-round { font-size: 1.375rem; }
 
 /* ═══════════════════════════════════════
    HERO / HEADER CARD
@@ -400,6 +314,76 @@ input, textarea, select {
   0%,100% { box-shadow: 0 0 0 3px rgba(74,222,128,0.25); }
   50%      { box-shadow: 0 0 0 8px rgba(74,222,128,0.08); }
 }
+
+/* ─── Theme Dots ─── */
+.theme-row { display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.25); padding: 6px 10px; border-radius: var(--r-full); border: 1px solid rgba(255,255,255,0.08); }
+.theme-dot {
+  width: 18px; height: 18px; border-radius: 50%;
+  cursor: pointer; border: 2px solid transparent;
+  transition: transform 300ms var(--spring), border-color 200ms;
+}
+.theme-dot:hover { transform: scale(1.3); }
+.theme-dot.active { border-color: white; transform: scale(1.25); box-shadow: 0 0 0 2px rgba(255,255,255,0.3); }
+.theme-dot[data-color="blue"]   { background: #38bdf8; }
+.theme-dot[data-color="red"]    { background: #ef4444; }
+.theme-dot[data-color="pink"]   { background: #ec4899; }
+.theme-dot[data-color="green"]  { background: #10b981; }
+.theme-dot[data-color="orange"] { background: #f97316; }
+.theme-dot[data-color="purple"] { background: #a855f7; }
+.theme-dot[data-color="yellow"] { background: #eab308; }
+.theme-dot[data-color="cyan"]   { background: #06b6d4; }
+
+/* ─── Theme Popup ─── */
+#themePopup {
+  position: absolute; right: 0; top: calc(100% + 10px);
+  background: var(--surface-container-highest);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--r-xl);
+  padding: 14px;
+  display: flex; flex-wrap: wrap; gap: 10px;
+  z-index: 200;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  backdrop-filter: blur(16px);
+  opacity: 0; transform: scale(0.9) translateY(-6px);
+  transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
+  pointer-events: none;
+  width: 168px;
+}
+#themePopup.open {
+  opacity: 1; transform: none;
+  pointer-events: auto;
+}
+
+/* ─── Day/Night Toggle ─── */
+.day-night-btn {
+  width: 36px; height: 36px;
+  border-radius: var(--r-full);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.25);
+  color: var(--on-primary-container);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 250ms var(--spring);
+  flex-shrink: 0;
+}
+.day-night-btn:hover { transform: scale(1.15); background: rgba(0,0,0,0.4); }
+.day-night-btn .material-icons-round { font-size: 1.1rem; }
+
+/* ─── Color Palette Button ─── */
+.palette-btn {
+  width: 36px; height: 36px;
+  border-radius: var(--r-full);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.25);
+  background-image: conic-gradient(#ef4444, #f97316, #eab308, #10b981, #38bdf8, #a855f7, #ec4899, #ef4444);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 250ms var(--spring);
+  position: relative;
+  flex-shrink: 0;
+}
+.palette-btn:hover { transform: scale(1.15) rotate(30deg); }
+.palette-btn-wrap { position: relative; }
 
 /* ─── Profile Chip ─── */
 .profile-chip {
@@ -464,14 +448,14 @@ input, textarea, select {
 .tab-btn.active { animation: tab-pop var(--dur-short) var(--spring); }
 
 /* ═══════════════════════════════════════
-   SEARCH BAR — Total badge inside
+   SEARCH BAR
 ═══════════════════════════════════════ */
 .search-wrap {
   display: flex; align-items: center; gap: 10px;
   background: var(--surface-container-high);
   border: 1.5px solid var(--outline-variant);
   border-radius: var(--r-full);
-  padding: 10px 14px 10px 16px;
+  padding: 12px 18px;
   margin-bottom: 16px;
   transition: border-color var(--dur-short) var(--standard),
               box-shadow var(--dur-short) var(--standard);
@@ -485,16 +469,14 @@ input, textarea, select {
   flex: 1; border: none; background: transparent; outline: none;
   color: var(--on-surface);
   font-family: 'Google Sans', sans-serif; font-size: 1rem;
-  min-width: 0;
 }
 .search-wrap input::placeholder { color: var(--on-surface-variant); }
 .total-badge {
   background: var(--secondary-container);
   color: var(--on-secondary-container, var(--on-surface-variant));
-  font-size: 0.72rem; font-weight: 700;
-  padding: 4px 10px; border-radius: var(--r-full);
+  font-size: 0.75rem; font-weight: 600;
+  padding: 4px 12px; border-radius: var(--r-full);
   white-space: nowrap; flex-shrink: 0;
-  letter-spacing: 0.02em;
 }
 
 /* ═══════════════════════════════════════
@@ -522,20 +504,6 @@ input, textarea, select {
 }
 .deleting { animation: card-out 380ms var(--spring) forwards !important; pointer-events: none; }
 
-/* Serial number badge */
-.card-serial {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-width: 22px; height: 22px;
-  background: color-mix(in srgb, var(--primary) 20%, var(--surface-container-high));
-  border: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
-  color: var(--primary);
-  font-size: 0.7rem; font-weight: 700;
-  border-radius: var(--r-sm);
-  padding: 0 5px;
-  flex-shrink: 0;
-  letter-spacing: 0.03em;
-}
-
 .card-title {
   font-family: 'Google Sans Display', sans-serif;
   font-size: 1.05rem; font-weight: 700;
@@ -544,6 +512,16 @@ input, textarea, select {
   margin-bottom: 14px; word-break: break-all;
 }
 .card-title .material-icons-round { color: var(--primary); font-size: 1.1rem; flex-shrink: 0; }
+.card-serial {
+  font-size: 0.7rem; font-weight: 700;
+  color: var(--on-primary);
+  background: var(--primary);
+  border-radius: var(--r-xs);
+  padding: 2px 6px;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
 
 /* ─── Card Action Buttons ─── */
 .card-actions { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
@@ -636,8 +614,6 @@ input, textarea, select {
   transition: border-color var(--dur-short) var(--standard),
               box-shadow var(--dur-short) var(--standard),
               background var(--dur-short) var(--standard);
-  user-select: text;
-  -webkit-user-select: text;
 }
 .m3-input::placeholder { color: var(--on-surface-variant); }
 .m3-input:focus {
@@ -757,7 +733,7 @@ input, textarea, select {
   60%  { transform: translateX(-5px); }
   80%  { transform: translateX(4px); }
 }
-.error-shake { animation: shake 0.42s ease-in-out; border-color: var(--error) !important; box-shadow: 0 0 0 3px rgba(255,180,171,0.25) !important; }
+.error-shake { animation: shake 0.42s ease-in-out; box-shadow: 0 0 0 3px rgba(255,180,171,0.25) !important; }
 
 /* ═══════════════════════════════════════
    UTILITY
@@ -780,53 +756,13 @@ input, textarea, select {
   <p>Authenticating...</p>
 </div>
 
-<!-- COLOR THEME SHEET -->
-<div class="theme-sheet-overlay" id="themeOverlay"></div>
-<div class="theme-sheet" id="themeSheet">
-  <div class="theme-sheet-handle"></div>
-  <div class="theme-sheet-title">
-    <span class="material-icons-round">palette</span>
-    Choose Theme
-  </div>
-  <div class="theme-options-grid">
-    <button class="theme-option-btn" data-theme="blue">
-      <div class="theme-option-swatch"></div>
-      Ocean Blue
-    </button>
-    <button class="theme-option-btn" data-theme="red">
-      <div class="theme-option-swatch"></div>
-      Crimson Red
-    </button>
-    <button class="theme-option-btn" data-theme="pink">
-      <div class="theme-option-swatch"></div>
-      Rose Pink
-    </button>
-    <button class="theme-option-btn" data-theme="green">
-      <div class="theme-option-swatch"></div>
-      Emerald
-    </button>
-    <button class="theme-option-btn" data-theme="dark">
-      <div class="theme-option-swatch"></div>
-      Midnight
-    </button>
-    <button class="theme-option-btn" data-theme="light">
-      <div class="theme-option-swatch"></div>
-      Daylight
-    </button>
-  </div>
-</div>
-
 <!-- TOP APP BAR -->
 <div class="top-bar" id="topBar" style="display:none">
   <span class="top-bar-title">Paste Manager</span>
-  <div class="top-bar-actions">
-    <button class="icon-btn daynight-btn ripple-surface squiggle" id="btnDayNight" title="Toggle Day/Night">
-      <span class="material-icons-round">light_mode</span>
-    </button>
+  <div style="display:flex;gap:4px;align-items:center">
     <button class="icon-btn ripple-surface squiggle" onclick="refreshApps()" title="Refresh">
       <span class="material-icons-round">refresh</span>
     </button>
-    <button class="theme-picker-btn ripple-surface squiggle" id="btnThemePicker" title="Change Theme"></button>
   </div>
 </div>
 
@@ -854,6 +790,26 @@ input, textarea, select {
         <div class="hero-title">
           Paste Manager <div class="live-dot"></div>
         </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <!-- Day/Night Toggle -->
+          <button class="day-night-btn ripple-surface squiggle" id="dayNightBtn" title="Toggle Day/Night">
+            <span class="material-icons-round" id="dayNightIcon">dark_mode</span>
+          </button>
+          <!-- Color Theme Picker -->
+          <div class="palette-btn-wrap">
+            <button class="palette-btn ripple-surface squiggle" id="paletteBtn" title="Change Color Theme"></button>
+            <div id="themePopup">
+              <span class="theme-dot active" data-color="blue"></span>
+              <span class="theme-dot" data-color="red"></span>
+              <span class="theme-dot" data-color="pink"></span>
+              <span class="theme-dot" data-color="green"></span>
+              <span class="theme-dot" data-color="orange"></span>
+              <span class="theme-dot" data-color="purple"></span>
+              <span class="theme-dot" data-color="yellow"></span>
+              <span class="theme-dot" data-color="cyan"></span>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="hero-row">
         <div class="profile-chip">
@@ -870,7 +826,7 @@ input, textarea, select {
     <!-- TABS -->
     <div class="tabs-row">
       <button class="tab-btn active ripple-surface" id="tabMyPastes">
-        <span class="material-icons-round">apps</span> My Paste's
+        <span class="material-icons-round">content_paste</span> My Paste's
       </button>
       <button class="tab-btn ripple-surface" id="tabCreate">
         <span class="material-icons-round">edit_note</span> Editor
@@ -921,7 +877,7 @@ input, textarea, select {
 </button>
 
 <!-- ════════════════════════════════════════
-     FIREBASE + APP LOGIC
+     FIREBASE + APP LOGIC (exact from app.js)
 ════════════════════════════════════════ -->
 <script type="module">
 import { initializeApp }         from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
@@ -1017,82 +973,63 @@ function triggerErrorShake(el) {
 }
 
 /* ════════════════════════════════
-   THEME SYSTEM (color + day/night)
+   THEME DOTS + PALETTE POPUP
 ════════════════════════════════ */
-const COLOR_THEMES = ['blue', 'red', 'pink', 'green'];
-const NIGHT_THEMES = [...COLOR_THEMES, 'dark'];
-const ALL_THEMES   = [...COLOR_THEMES, 'dark', 'light'];
+const themeDots  = document.querySelectorAll('.theme-dot');
+const savedTheme = localStorage.getItem('appTheme') || 'blue';
+const savedMode  = localStorage.getItem('appMode')  || 'night';
 
-// Restore saved theme (color preference + day/night state separately)
-const savedColorTheme = localStorage.getItem('appColorTheme') || 'blue';
-const savedDayNight   = localStorage.getItem('appDayNight') || 'night'; // 'day' | 'night'
+document.documentElement.setAttribute('data-theme', savedTheme);
+document.body.setAttribute('data-theme', savedTheme);
+if (savedMode === 'day') {
+  document.body.setAttribute('data-mode', 'day');
+} else {
+  document.body.removeAttribute('data-mode');
+}
 
-let activeColorTheme = savedColorTheme;
-let isDayMode = savedDayNight === 'day';
+const dayNightBtn  = document.getElementById('dayNightBtn');
+const dayNightIcon = document.getElementById('dayNightIcon');
+const paletteBtn   = document.getElementById('paletteBtn');
+const themePopup   = document.getElementById('themePopup');
 
-function applyTheme() {
-  const theme = isDayMode ? 'light' : activeColorTheme;
-  document.documentElement.setAttribute('data-theme', theme);
-  document.body.setAttribute('data-theme', theme);
-  localStorage.setItem('appDayNight', isDayMode ? 'day' : 'night');
-  // Update day/night icon
-  const dayNightBtn = document.getElementById('btnDayNight');
-  if (dayNightBtn) {
-    dayNightBtn.querySelector('.material-icons-round').textContent = isDayMode ? 'dark_mode' : 'light_mode';
-    dayNightBtn.title = isDayMode ? 'Switch to Night' : 'Switch to Day';
+function updateDayNightIcon(mode) {
+  dayNightIcon.textContent = mode === 'day' ? 'light_mode' : 'dark_mode';
+}
+updateDayNightIcon(savedMode);
+
+dayNightBtn.addEventListener('click', () => {
+  const current = localStorage.getItem('appMode') || 'night';
+  const next = current === 'night' ? 'day' : 'night';
+  localStorage.setItem('appMode', next);
+  if (next === 'day') {
+    document.body.setAttribute('data-mode', 'day');
+  } else {
+    document.body.removeAttribute('data-mode');
   }
-  updateParticleColor(theme);
-  // Update sheet active states
-  document.querySelectorAll('.theme-option-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.theme === (isDayMode ? 'light' : activeColorTheme));
-  });
-}
-
-// Apply on load
-applyTheme();
-
-// Day/Night toggle
-document.getElementById('btnDayNight').addEventListener('click', () => {
-  isDayMode = !isDayMode;
-  applyTheme();
-  showToast(isDayMode ? '☀️ Day Mode' : '🌙 Night Mode', 'success');
+  updateDayNightIcon(next);
 });
 
-// Theme picker sheet
-const themeOverlay = document.getElementById('themeOverlay');
-const themeSheet   = document.getElementById('themeSheet');
-
-function openThemeSheet() {
-  themeSheet.classList.add('open');
-  themeOverlay.classList.add('open');
-}
-function closeThemeSheet() {
-  themeSheet.classList.remove('open');
-  themeOverlay.classList.remove('open');
-}
-
-document.getElementById('btnThemePicker').addEventListener('click', openThemeSheet);
-themeOverlay.addEventListener('click', closeThemeSheet);
-
-document.querySelectorAll('.theme-option-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const chosen = btn.dataset.theme;
-    if (chosen === 'light') {
-      isDayMode = true;
-    } else {
-      isDayMode = false;
-      activeColorTheme = chosen;
-      localStorage.setItem('appColorTheme', chosen);
-    }
-    applyTheme();
-    closeThemeSheet();
-    showToast('Theme applied!', 'success');
-  });
+// Palette popup toggle
+paletteBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  themePopup.classList.toggle('open');
 });
+document.addEventListener('click', () => themePopup.classList.remove('open'));
+themePopup.addEventListener('click', e => e.stopPropagation());
 
-// Init active state on sheet
-document.querySelectorAll('.theme-option-btn').forEach(btn => {
-  btn.classList.toggle('active', btn.dataset.theme === (isDayMode ? 'light' : activeColorTheme));
+// Sync active dot
+themeDots.forEach(dot => {
+  dot.classList.toggle('active', dot.dataset.color === savedTheme);
+  dot.addEventListener('click', () => {
+    themeDots.forEach(d => d.classList.remove('active'));
+    dot.classList.add('active');
+    const c = dot.dataset.color;
+    document.documentElement.setAttribute('data-theme', c);
+    document.body.setAttribute('data-theme', c);
+    localStorage.setItem('appTheme', c);
+    updateParticleColor(c);
+    themePopup.classList.remove('open');
+  });
 });
 
 /* ════════════════════════════════
@@ -1109,11 +1046,12 @@ function updateParticleColor(t) {
   const map = {
     blue:'rgba(56,189,248,0.4)', red:'rgba(239,68,68,0.4)',
     pink:'rgba(236,72,153,0.4)', green:'rgba(16,185,129,0.4)',
-    dark:'rgba(139,143,168,0.3)', light:'rgba(37,99,235,0.18)'
+    orange:'rgba(249,115,22,0.4)', purple:'rgba(168,85,247,0.4)',
+    yellow:'rgba(234,179,8,0.4)', cyan:'rgba(6,182,212,0.4)'
   };
   pColor = map[t] || map.blue;
 }
-updateParticleColor(isDayMode ? 'light' : activeColorTheme);
+updateParticleColor(savedTheme);
 
 class Particle {
   constructor() { this.reset(true); }
@@ -1173,10 +1111,8 @@ btnAddNew.addEventListener('click', openEditorAdd);
    AUTH STATE
 ════════════════════════════════ */
 onAuthStateChanged(auth, user => {
-  // Instant hide — no delay
   loadingScreen.style.opacity = '0';
-  loadingScreen.style.pointerEvents = 'none';
-  setTimeout(() => loadingScreen.classList.add('hidden'), 250);
+  setTimeout(() => loadingScreen.classList.add('hidden'), 400);
 
   if (user) {
     currentUserUid = user.uid;
@@ -1218,7 +1154,6 @@ window.refreshApps = function() {
 function renderCards(data) {
   cardsGrid.innerHTML = '';
   const keys = Object.keys(data);
-  // Update total badge — just the number
   totalCount.textContent = `Total: ${keys.length}`;
   keys.sort((a, b) => new Date(data[b].updatedAt) - new Date(data[a].updatedAt));
 
@@ -1237,14 +1172,14 @@ function renderCards(data) {
     const dateStr = (item.updatedAt || '').split(',')[0] || '—';
     const chars   = item.chars || 0;
     const views   = item.views || 0;
-    const serialNum = idx + 1; // 1-based serial number
+    const serial  = String(idx + 1).padStart(2, '0');
 
     const card = document.createElement('div');
     card.className = 'card ripple-surface';
     card.style.animationDelay = `${idx * 45}ms`;
     card.innerHTML = `
       <div class="card-title">
-        <span class="card-serial">${serialNum}</span>
+        <span class="card-serial">${serial}</span>
         <span class="material-icons-round">content_paste</span>${escHtml(key)}
       </div>
       <div class="card-actions">
@@ -1395,9 +1330,7 @@ document.getElementById('loginBtn').addEventListener('click', () => {
   const email = document.getElementById('email').value.trim();
   const pass  = document.getElementById('password').value;
   if (!email || !pass) return showToast("Enter credentials", "error");
-  loadingScreen.classList.remove('hidden');
-  loadingScreen.style.opacity = '1';
-  loadingScreen.style.pointerEvents = 'all';
+  loadingScreen.classList.remove('hidden'); loadingScreen.style.opacity = '1';
   signInWithEmailAndPassword(auth, email, pass).catch(err => {
     loadingScreen.classList.add('hidden');
     showToast(err.message.replace('Firebase: ', ''), 'error');
@@ -1408,9 +1341,7 @@ document.getElementById('password').addEventListener('keydown', e => {
 });
 
 document.getElementById('logoutBtn').addEventListener('click', () => {
-  loadingScreen.classList.remove('hidden');
-  loadingScreen.style.opacity = '1';
-  loadingScreen.style.pointerEvents = 'all';
+  loadingScreen.classList.remove('hidden'); loadingScreen.style.opacity = '1';
   signOut(auth);
 });
 
