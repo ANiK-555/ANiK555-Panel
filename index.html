@@ -3,10 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>JSON App Manager</title>
+<title>Paste Manager</title>
+<!-- Preload critical resources for faster loading -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Display:wght@400;500;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Display:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" media="print" onload="this.media='all'">
+<!-- Noscript fallback for fonts -->
+<noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Display:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+</noscript>
 
 <style>
 /* ═══════════════════════════════════════
@@ -108,6 +115,40 @@
   --surface-container-high: #222F2A;
   --surface-container-highest: #2C3A35;
 }
+/* ─── DARK/NIGHT THEME ─── */
+[data-theme="dark"] {
+  --seed: #8B8FA8;
+  --seed-rgb: 139,143,168;
+  --primary: #C5C8E0;
+  --on-primary: #2C2F45;
+  --primary-container: #3F4258;
+  --on-primary-container: #E1E3F5;
+  --secondary-container: #3A3C4E;
+  --outline-variant: #454760;
+  --bg: #080A10; --surface: #080A10;
+  --surface-container: #12141E;
+  --surface-container-high: #1C1E2A;
+  --surface-container-highest: #262835;
+}
+/* ─── LIGHT/DAY THEME ─── */
+[data-theme="light"] {
+  --seed: #2563EB;
+  --seed-rgb: 37,99,235;
+  --primary: #1D4ED8;
+  --on-primary: #FFFFFF;
+  --primary-container: #DBEAFE;
+  --on-primary-container: #1E3A8A;
+  --secondary-container: #E0E7FF;
+  --outline-variant: #C7D2FE;
+  --bg: #F8FAFC; --surface: #F8FAFC;
+  --surface-container: #EFF2F8;
+  --surface-container-low: #F5F7FC;
+  --surface-container-high: #E4E8F3;
+  --surface-container-highest: #D8DDED;
+  --on-surface: #1E293B;
+  --on-surface-variant: #475569;
+  --outline: #94A3B8;
+}
 
 /* ═══════════════════════════════════════
    BASE
@@ -115,6 +156,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 *:focus { outline: none !important; }
 
+/* Disable text selection globally, allow only inside cards/boxes */
 body {
   font-family: 'Google Sans', system-ui, sans-serif;
   background: var(--bg);
@@ -122,6 +164,23 @@ body {
   min-height: 100dvh;
   overflow-x: hidden;
   transition: background var(--dur-long) var(--standard), color var(--dur-med) var(--standard);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: pan-y;
+}
+
+/* Allow selection + copy only inside cards */
+.card, .card * {
+  user-select: text;
+  -webkit-user-select: text;
+  -webkit-touch-callout: default;
+}
+
+/* Disable zoom on inputs */
+input, textarea, select {
+  font-size: 16px !important;
+  touch-action: manipulation;
 }
 
 /* particles */
@@ -154,20 +213,21 @@ body {
 .squiggle:active { animation: squiggle 420ms var(--spring); }
 
 /* ═══════════════════════════════════════
-   LOADING SCREEN
+   LOADING SCREEN — instant hide after auth
 ═══════════════════════════════════════ */
 #loadingScreen {
   position: fixed; inset: 0; z-index: 9999;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
   background: var(--bg);
-  transition: opacity var(--dur-med) var(--ease-in);
+  transition: opacity 250ms var(--ease-in);
+  will-change: opacity;
 }
 .m3-spinner {
   width: 48px; height: 48px;
   border: 4px solid var(--surface-container-highest);
   border-top-color: var(--primary);
   border-radius: 50%;
-  animation: spin 900ms linear infinite;
+  animation: spin 700ms linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 #loadingScreen p {
@@ -181,7 +241,7 @@ body {
 .top-bar {
   position: sticky; top: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 16px;
+  padding: 10px 12px;
   background: color-mix(in srgb, var(--surface-container) 90%, transparent);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -193,12 +253,15 @@ body {
   font-size: 1.35rem; font-weight: 700;
   color: var(--on-surface); letter-spacing: -0.01em;
 }
+.top-bar-actions {
+  display: flex; gap: 2px; align-items: center;
+}
 
 /* ═══════════════════════════════════════
    ICON BUTTON
 ═══════════════════════════════════════ */
 .icon-btn {
-  width: 48px; height: 48px;
+  width: 44px; height: 44px;
   border-radius: var(--r-full);
   border: none; background: transparent;
   color: var(--on-surface-variant);
@@ -207,7 +270,102 @@ body {
   transition: background var(--dur-short) var(--standard);
 }
 .icon-btn:hover { background: color-mix(in srgb, var(--on-surface) 8%, transparent); }
-.icon-btn .material-icons-round { font-size: 1.375rem; }
+.icon-btn .material-icons-round { font-size: 1.25rem; }
+
+/* Day/Night toggle button */
+.icon-btn.daynight-btn .material-icons-round {
+  transition: transform 400ms var(--spring), color 200ms;
+}
+[data-theme="light"] .icon-btn.daynight-btn .material-icons-round {
+  color: #F59E0B;
+}
+
+/* ─── Color Theme Picker Button ─── */
+.theme-picker-btn {
+  width: 44px; height: 44px;
+  border-radius: var(--r-full);
+  border: none;
+  background: conic-gradient(from 0deg, #38bdf8, #ec4899, #ef4444, #10b981, #38bdf8);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 0 2px var(--outline-variant), 0 0 12px rgba(var(--seed-rgb),0.35);
+  transition: transform 300ms var(--spring), box-shadow 200ms;
+  position: relative;
+}
+.theme-picker-btn:hover { transform: scale(1.12) rotate(15deg); box-shadow: 0 0 0 2px var(--primary), 0 0 18px rgba(var(--seed-rgb),0.5); }
+.theme-picker-btn::after {
+  content: '';
+  position: absolute; inset: 4px;
+  background: var(--surface-container);
+  border-radius: 50%;
+}
+
+/* ─── Color Theme Sheet / Bottom Sheet ─── */
+.theme-sheet-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: var(--scrim);
+  opacity: 0; pointer-events: none;
+  transition: opacity 250ms var(--standard);
+}
+.theme-sheet-overlay.open {
+  opacity: 1; pointer-events: all;
+}
+.theme-sheet {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 501;
+  background: var(--surface-container-high);
+  border-top: 1px solid var(--outline-variant);
+  border-radius: 28px 28px 0 0;
+  padding: 12px 24px 32px;
+  transform: translateY(100%);
+  transition: transform 380ms var(--spring);
+  max-width: 520px; margin: 0 auto;
+  box-shadow: 0 -8px 40px rgba(0,0,0,0.5);
+}
+.theme-sheet.open { transform: translateY(0); }
+.theme-sheet-handle {
+  width: 36px; height: 4px; border-radius: var(--r-full);
+  background: var(--outline-variant);
+  margin: 0 auto 20px;
+}
+.theme-sheet-title {
+  font-family: 'Google Sans Display', sans-serif;
+  font-size: 1.1rem; font-weight: 700;
+  color: var(--on-surface);
+  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 8px;
+}
+.theme-sheet-title .material-icons-round { color: var(--primary); font-size: 1.2rem; }
+.theme-options-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+}
+.theme-option-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 14px 8px;
+  border-radius: var(--r-xl);
+  border: 2px solid transparent;
+  background: var(--surface-container);
+  cursor: pointer;
+  transition: all 250ms var(--spring);
+  font-family: 'Google Sans', sans-serif;
+  font-size: 0.75rem; font-weight: 600;
+  color: var(--on-surface-variant);
+}
+.theme-option-btn:hover { transform: translateY(-2px); background: var(--surface-container-highest); }
+.theme-option-btn.active {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 12%, var(--surface-container));
+  color: var(--primary);
+}
+.theme-option-swatch {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+}
+.theme-option-btn[data-theme="blue"] .theme-option-swatch { background: linear-gradient(135deg, #38bdf8, #0ea5e9); }
+.theme-option-btn[data-theme="red"] .theme-option-swatch { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.theme-option-btn[data-theme="pink"] .theme-option-swatch { background: linear-gradient(135deg, #ec4899, #db2777); }
+.theme-option-btn[data-theme="green"] .theme-option-swatch { background: linear-gradient(135deg, #10b981, #059669); }
+.theme-option-btn[data-theme="dark"] .theme-option-swatch { background: linear-gradient(135deg, #1e1e2e, #11111b); }
+.theme-option-btn[data-theme="light"] .theme-option-swatch { background: linear-gradient(135deg, #dbeafe, #eff6ff); border-color: #93c5fd; }
 
 /* ═══════════════════════════════════════
    HERO / HEADER CARD
@@ -242,20 +400,6 @@ body {
   0%,100% { box-shadow: 0 0 0 3px rgba(74,222,128,0.25); }
   50%      { box-shadow: 0 0 0 8px rgba(74,222,128,0.08); }
 }
-
-/* ─── Theme Dots ─── */
-.theme-row { display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.25); padding: 6px 12px; border-radius: var(--r-full); border: 1px solid rgba(255,255,255,0.08); }
-.theme-dot {
-  width: 18px; height: 18px; border-radius: 50%;
-  cursor: pointer; border: 2px solid transparent;
-  transition: transform 300ms var(--spring), border-color 200ms;
-}
-.theme-dot:hover { transform: scale(1.3); }
-.theme-dot.active { border-color: white; transform: scale(1.25); box-shadow: 0 0 0 2px rgba(255,255,255,0.3); }
-.theme-dot[data-color="blue"]  { background: #38bdf8; }
-.theme-dot[data-color="red"]   { background: #ef4444; }
-.theme-dot[data-color="pink"]  { background: #ec4899; }
-.theme-dot[data-color="green"] { background: #10b981; }
 
 /* ─── Profile Chip ─── */
 .profile-chip {
@@ -320,14 +464,14 @@ body {
 .tab-btn.active { animation: tab-pop var(--dur-short) var(--spring); }
 
 /* ═══════════════════════════════════════
-   SEARCH BAR
+   SEARCH BAR — Total badge inside
 ═══════════════════════════════════════ */
 .search-wrap {
   display: flex; align-items: center; gap: 10px;
   background: var(--surface-container-high);
   border: 1.5px solid var(--outline-variant);
   border-radius: var(--r-full);
-  padding: 12px 18px;
+  padding: 10px 14px 10px 16px;
   margin-bottom: 16px;
   transition: border-color var(--dur-short) var(--standard),
               box-shadow var(--dur-short) var(--standard);
@@ -341,14 +485,16 @@ body {
   flex: 1; border: none; background: transparent; outline: none;
   color: var(--on-surface);
   font-family: 'Google Sans', sans-serif; font-size: 1rem;
+  min-width: 0;
 }
 .search-wrap input::placeholder { color: var(--on-surface-variant); }
 .total-badge {
   background: var(--secondary-container);
   color: var(--on-secondary-container, var(--on-surface-variant));
-  font-size: 0.75rem; font-weight: 600;
-  padding: 4px 12px; border-radius: var(--r-full);
+  font-size: 0.72rem; font-weight: 700;
+  padding: 4px 10px; border-radius: var(--r-full);
   white-space: nowrap; flex-shrink: 0;
+  letter-spacing: 0.02em;
 }
 
 /* ═══════════════════════════════════════
@@ -375,6 +521,20 @@ body {
   to { opacity: 0; transform: scale(0.86); }
 }
 .deleting { animation: card-out 380ms var(--spring) forwards !important; pointer-events: none; }
+
+/* Serial number badge */
+.card-serial {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 22px; height: 22px;
+  background: color-mix(in srgb, var(--primary) 20%, var(--surface-container-high));
+  border: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
+  color: var(--primary);
+  font-size: 0.7rem; font-weight: 700;
+  border-radius: var(--r-sm);
+  padding: 0 5px;
+  flex-shrink: 0;
+  letter-spacing: 0.03em;
+}
 
 .card-title {
   font-family: 'Google Sans Display', sans-serif;
@@ -476,6 +636,8 @@ body {
   transition: border-color var(--dur-short) var(--standard),
               box-shadow var(--dur-short) var(--standard),
               background var(--dur-short) var(--standard);
+  user-select: text;
+  -webkit-user-select: text;
 }
 .m3-input::placeholder { color: var(--on-surface-variant); }
 .m3-input:focus {
@@ -618,13 +780,53 @@ body {
   <p>Authenticating...</p>
 </div>
 
+<!-- COLOR THEME SHEET -->
+<div class="theme-sheet-overlay" id="themeOverlay"></div>
+<div class="theme-sheet" id="themeSheet">
+  <div class="theme-sheet-handle"></div>
+  <div class="theme-sheet-title">
+    <span class="material-icons-round">palette</span>
+    Choose Theme
+  </div>
+  <div class="theme-options-grid">
+    <button class="theme-option-btn" data-theme="blue">
+      <div class="theme-option-swatch"></div>
+      Ocean Blue
+    </button>
+    <button class="theme-option-btn" data-theme="red">
+      <div class="theme-option-swatch"></div>
+      Crimson Red
+    </button>
+    <button class="theme-option-btn" data-theme="pink">
+      <div class="theme-option-swatch"></div>
+      Rose Pink
+    </button>
+    <button class="theme-option-btn" data-theme="green">
+      <div class="theme-option-swatch"></div>
+      Emerald
+    </button>
+    <button class="theme-option-btn" data-theme="dark">
+      <div class="theme-option-swatch"></div>
+      Midnight
+    </button>
+    <button class="theme-option-btn" data-theme="light">
+      <div class="theme-option-swatch"></div>
+      Daylight
+    </button>
+  </div>
+</div>
+
 <!-- TOP APP BAR -->
 <div class="top-bar" id="topBar" style="display:none">
-  <span class="top-bar-title">JSON App Manager</span>
-  <div style="display:flex;gap:4px;align-items:center">
+  <span class="top-bar-title">Paste Manager</span>
+  <div class="top-bar-actions">
+    <button class="icon-btn daynight-btn ripple-surface squiggle" id="btnDayNight" title="Toggle Day/Night">
+      <span class="material-icons-round">light_mode</span>
+    </button>
     <button class="icon-btn ripple-surface squiggle" onclick="refreshApps()" title="Refresh">
       <span class="material-icons-round">refresh</span>
     </button>
+    <button class="theme-picker-btn ripple-surface squiggle" id="btnThemePicker" title="Change Theme"></button>
   </div>
 </div>
 
@@ -650,13 +852,7 @@ body {
     <div class="hero-card">
       <div class="hero-row" style="margin-bottom:14px">
         <div class="hero-title">
-          App Manager <div class="live-dot"></div>
-        </div>
-        <div class="theme-row">
-          <span class="theme-dot active" data-color="blue"></span>
-          <span class="theme-dot" data-color="red"></span>
-          <span class="theme-dot" data-color="pink"></span>
-          <span class="theme-dot" data-color="green"></span>
+          Paste Manager <div class="live-dot"></div>
         </div>
       </div>
       <div class="hero-row">
@@ -674,7 +870,7 @@ body {
     <!-- TABS -->
     <div class="tabs-row">
       <button class="tab-btn active ripple-surface" id="tabMyPastes">
-        <span class="material-icons-round">apps</span> My Apps
+        <span class="material-icons-round">apps</span> My Paste's
       </button>
       <button class="tab-btn ripple-surface" id="tabCreate">
         <span class="material-icons-round">edit_note</span> Editor
@@ -685,8 +881,8 @@ body {
     <div id="viewList">
       <div class="search-wrap">
         <span class="material-icons-round">search</span>
-        <input type="search" id="searchInput" placeholder="Search apps...">
-        <span class="total-badge" id="totalCount">Total: 0 Apps</span>
+        <input type="search" id="searchInput" placeholder="Search pastes...">
+        <span class="total-badge" id="totalCount">Total: 0</span>
       </div>
       <div class="cards-grid" id="cardsGrid"></div>
     </div>
@@ -696,12 +892,12 @@ body {
       <div class="editor-card ripple-surface">
         <h2 id="editorTitle">
           <span class="material-icons-round">add_circle</span>
-          Add New App
+          Add New Paste
         </h2>
 
         <div class="field-group">
-          <label class="field-label" for="appName">Endpoint ID</label>
-          <input class="m3-input" type="text" id="appName" placeholder="e.g. Careem-Captain">
+          <label class="field-label" for="appName">App Name &amp; Version</label>
+          <input class="m3-input" type="text" id="appName" placeholder="Example-App-v2.0">
         </div>
 
         <div class="field-group">
@@ -725,7 +921,7 @@ body {
 </button>
 
 <!-- ════════════════════════════════════════
-     FIREBASE + APP LOGIC (exact from app.js)
+     FIREBASE + APP LOGIC
 ════════════════════════════════════════ -->
 <script type="module">
 import { initializeApp }         from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
@@ -821,21 +1017,82 @@ function triggerErrorShake(el) {
 }
 
 /* ════════════════════════════════
-   THEME DOTS
+   THEME SYSTEM (color + day/night)
 ════════════════════════════════ */
-const themeDots   = document.querySelectorAll('.theme-dot');
-const savedTheme  = localStorage.getItem('appTheme') || 'blue';
-document.body.setAttribute('data-theme', savedTheme);
-themeDots.forEach(dot => {
-  dot.classList.toggle('active', dot.dataset.color === savedTheme);
-  dot.addEventListener('click', () => {
-    themeDots.forEach(d => d.classList.remove('active'));
-    dot.classList.add('active');
-    const c = dot.dataset.color;
-    document.body.setAttribute('data-theme', c);
-    localStorage.setItem('appTheme', c);
-    updateParticleColor(c);
+const COLOR_THEMES = ['blue', 'red', 'pink', 'green'];
+const NIGHT_THEMES = [...COLOR_THEMES, 'dark'];
+const ALL_THEMES   = [...COLOR_THEMES, 'dark', 'light'];
+
+// Restore saved theme (color preference + day/night state separately)
+const savedColorTheme = localStorage.getItem('appColorTheme') || 'blue';
+const savedDayNight   = localStorage.getItem('appDayNight') || 'night'; // 'day' | 'night'
+
+let activeColorTheme = savedColorTheme;
+let isDayMode = savedDayNight === 'day';
+
+function applyTheme() {
+  const theme = isDayMode ? 'light' : activeColorTheme;
+  document.documentElement.setAttribute('data-theme', theme);
+  document.body.setAttribute('data-theme', theme);
+  localStorage.setItem('appDayNight', isDayMode ? 'day' : 'night');
+  // Update day/night icon
+  const dayNightBtn = document.getElementById('btnDayNight');
+  if (dayNightBtn) {
+    dayNightBtn.querySelector('.material-icons-round').textContent = isDayMode ? 'dark_mode' : 'light_mode';
+    dayNightBtn.title = isDayMode ? 'Switch to Night' : 'Switch to Day';
+  }
+  updateParticleColor(theme);
+  // Update sheet active states
+  document.querySelectorAll('.theme-option-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.theme === (isDayMode ? 'light' : activeColorTheme));
   });
+}
+
+// Apply on load
+applyTheme();
+
+// Day/Night toggle
+document.getElementById('btnDayNight').addEventListener('click', () => {
+  isDayMode = !isDayMode;
+  applyTheme();
+  showToast(isDayMode ? '☀️ Day Mode' : '🌙 Night Mode', 'success');
+});
+
+// Theme picker sheet
+const themeOverlay = document.getElementById('themeOverlay');
+const themeSheet   = document.getElementById('themeSheet');
+
+function openThemeSheet() {
+  themeSheet.classList.add('open');
+  themeOverlay.classList.add('open');
+}
+function closeThemeSheet() {
+  themeSheet.classList.remove('open');
+  themeOverlay.classList.remove('open');
+}
+
+document.getElementById('btnThemePicker').addEventListener('click', openThemeSheet);
+themeOverlay.addEventListener('click', closeThemeSheet);
+
+document.querySelectorAll('.theme-option-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const chosen = btn.dataset.theme;
+    if (chosen === 'light') {
+      isDayMode = true;
+    } else {
+      isDayMode = false;
+      activeColorTheme = chosen;
+      localStorage.setItem('appColorTheme', chosen);
+    }
+    applyTheme();
+    closeThemeSheet();
+    showToast('Theme applied!', 'success');
+  });
+});
+
+// Init active state on sheet
+document.querySelectorAll('.theme-option-btn').forEach(btn => {
+  btn.classList.toggle('active', btn.dataset.theme === (isDayMode ? 'light' : activeColorTheme));
 });
 
 /* ════════════════════════════════
@@ -849,10 +1106,14 @@ function resizeCanvas() { canvas.width = innerWidth; canvas.height = innerHeight
 addEventListener('resize', resizeCanvas); resizeCanvas();
 
 function updateParticleColor(t) {
-  const map = { blue:'rgba(56,189,248,0.4)', red:'rgba(239,68,68,0.4)', pink:'rgba(236,72,153,0.4)', green:'rgba(16,185,129,0.4)' };
+  const map = {
+    blue:'rgba(56,189,248,0.4)', red:'rgba(239,68,68,0.4)',
+    pink:'rgba(236,72,153,0.4)', green:'rgba(16,185,129,0.4)',
+    dark:'rgba(139,143,168,0.3)', light:'rgba(37,99,235,0.18)'
+  };
   pColor = map[t] || map.blue;
 }
-updateParticleColor(savedTheme);
+updateParticleColor(isDayMode ? 'light' : activeColorTheme);
 
 class Particle {
   constructor() { this.reset(true); }
@@ -894,7 +1155,7 @@ function switchTab(tab) {
 }
 
 function openEditorAdd() {
-  editorTitle.innerHTML = `<span class="material-icons-round">add_circle</span> Add New App`;
+  editorTitle.innerHTML = `<span class="material-icons-round">add_circle</span> Add New Paste`;
   saveBtnText.textContent = "Add to Database";
   saveBtn.querySelector('.material-icons-round').textContent = 'cloud_upload';
   appNameInput.value    = '';
@@ -912,8 +1173,10 @@ btnAddNew.addEventListener('click', openEditorAdd);
    AUTH STATE
 ════════════════════════════════ */
 onAuthStateChanged(auth, user => {
+  // Instant hide — no delay
   loadingScreen.style.opacity = '0';
-  setTimeout(() => loadingScreen.classList.add('hidden'), 400);
+  loadingScreen.style.pointerEvents = 'none';
+  setTimeout(() => loadingScreen.classList.add('hidden'), 250);
 
   if (user) {
     currentUserUid = user.uid;
@@ -955,13 +1218,14 @@ window.refreshApps = function() {
 function renderCards(data) {
   cardsGrid.innerHTML = '';
   const keys = Object.keys(data);
-  totalCount.textContent = `Total: ${keys.length} App${keys.length !== 1 ? 's' : ''}`;
+  // Update total badge — just the number
+  totalCount.textContent = `Total: ${keys.length}`;
   keys.sort((a, b) => new Date(data[b].updatedAt) - new Date(data[a].updatedAt));
 
   if (keys.length === 0) {
     cardsGrid.innerHTML = `<div class="empty-state">
       <span class="material-icons-round">inbox</span>
-      <p>No apps yet. Tap + to add one.</p>
+      <p>No pastes yet. Tap + to add one.</p>
     </div>`;
     return;
   }
@@ -973,13 +1237,15 @@ function renderCards(data) {
     const dateStr = (item.updatedAt || '').split(',')[0] || '—';
     const chars   = item.chars || 0;
     const views   = item.views || 0;
+    const serialNum = idx + 1; // 1-based serial number
 
     const card = document.createElement('div');
     card.className = 'card ripple-surface';
     card.style.animationDelay = `${idx * 45}ms`;
     card.innerHTML = `
       <div class="card-title">
-        <span class="material-icons-round">api</span>${escHtml(key)}
+        <span class="card-serial">${serialNum}</span>
+        <span class="material-icons-round">content_paste</span>${escHtml(key)}
       </div>
       <div class="card-actions">
         <button class="action-btn btn-visit squiggle ripple-surface" data-url="${rawUrl}">
@@ -1129,7 +1395,9 @@ document.getElementById('loginBtn').addEventListener('click', () => {
   const email = document.getElementById('email').value.trim();
   const pass  = document.getElementById('password').value;
   if (!email || !pass) return showToast("Enter credentials", "error");
-  loadingScreen.classList.remove('hidden'); loadingScreen.style.opacity = '1';
+  loadingScreen.classList.remove('hidden');
+  loadingScreen.style.opacity = '1';
+  loadingScreen.style.pointerEvents = 'all';
   signInWithEmailAndPassword(auth, email, pass).catch(err => {
     loadingScreen.classList.add('hidden');
     showToast(err.message.replace('Firebase: ', ''), 'error');
@@ -1140,7 +1408,9 @@ document.getElementById('password').addEventListener('keydown', e => {
 });
 
 document.getElementById('logoutBtn').addEventListener('click', () => {
-  loadingScreen.classList.remove('hidden'); loadingScreen.style.opacity = '1';
+  loadingScreen.classList.remove('hidden');
+  loadingScreen.style.opacity = '1';
+  loadingScreen.style.pointerEvents = 'all';
   signOut(auth);
 });
 
