@@ -66,6 +66,33 @@
   --r-full: 9999px;
 }
 
+/* ─── RED THEME ─── */
+[data-theme="red"] {
+  --seed: #ef4444; --seed-rgb: 239,68,68;
+  --primary: #FFB3AE; --on-primary: #680003;
+  --primary-container: #930006; --on-primary-container: #FFDAD7;
+  --secondary-container: #5A3535; --outline-variant: #4F3030;
+  --bg: #180808; --surface: #180808;
+  --surface-container: #241010; --surface-container-high: #2F1A1A; --surface-container-highest: #3A2222;
+}
+/* ─── PINK THEME ─── */
+[data-theme="pink"] {
+  --seed: #ec4899; --seed-rgb: 236,72,153;
+  --primary: #FFB0CB; --on-primary: #650033;
+  --primary-container: #8E0049; --on-primary-container: #FFD9E5;
+  --secondary-container: #5A3548; --outline-variant: #4F303F;
+  --bg: #180810; --surface: #180810;
+  --surface-container: #24101C; --surface-container-high: #2F1A26; --surface-container-highest: #3A2230;
+}
+/* ─── GREEN THEME ─── */
+[data-theme="green"] {
+  --seed: #10b981; --seed-rgb: 16,185,129;
+  --primary: #6CDBB0; --on-primary: #003826;
+  --primary-container: #005238; --on-primary-container: #89F8CC;
+  --secondary-container: #354A42; --outline-variant: #304540;
+  --bg: #081210; --surface: #081210;
+  --surface-container: #101C18; --surface-container-high: #1A2620; --surface-container-highest: #24302A;
+}
 /* ─── ORANGE THEME ─── */
 [data-theme="orange"] {
   --seed: #f97316; --seed-rgb: 249,115,22;
@@ -101,6 +128,42 @@
   --secondary-container: #354A50; --outline-variant: #3A4A50;
   --bg: #080F12; --surface: #080F12;
   --surface-container: #121C20; --surface-container-high: #1C262A; --surface-container-highest: #263035;
+}
+/* ─── ROSE GOLD THEME ─── */
+[data-theme="rosegold"] {
+  --seed: #e8927c; --seed-rgb: 232,146,124;
+  --primary: #FFB5A0; --on-primary: #5C1A08;
+  --primary-container: #7D2D14; --on-primary-container: #FFDBD1;
+  --secondary-container: #5A3D38; --outline-variant: #503830;
+  --bg: #1A0E0A; --surface: #1A0E0A;
+  --surface-container: #261614; --surface-container-high: #30201C; --surface-container-highest: #3C2A26;
+}
+/* ─── MINT THEME ─── */
+[data-theme="mint"] {
+  --seed: #34d399; --seed-rgb: 52,211,153;
+  --primary: #70DDB8; --on-primary: #003828;
+  --primary-container: #00523C; --on-primary-container: #8EFAD5;
+  --secondary-container: #30483E; --outline-variant: #2C4238;
+  --bg: #071210; --surface: #071210;
+  --surface-container: #0F1E18; --surface-container-high: #192820; --surface-container-highest: #22322A;
+}
+/* ─── INDIGO THEME ─── */
+[data-theme="indigo"] {
+  --seed: #6366f1; --seed-rgb: 99,102,241;
+  --primary: #BFC0FF; --on-primary: #0F0080;
+  --primary-container: #2900B8; --on-primary-container: #E2E0FF;
+  --secondary-container: #3A3868; --outline-variant: #383560;
+  --bg: #0D0C1C; --surface: #0D0C1C;
+  --surface-container: #181628; --surface-container-high: #222034; --surface-container-highest: #2C2A40;
+}
+/* ─── AMBER THEME ─── */
+[data-theme="amber"] {
+  --seed: #f59e0b; --seed-rgb: 245,158,11;
+  --primary: #FFD060; --on-primary: #3C2600;
+  --primary-container: #583A00; --on-primary-container: #FFDE80;
+  --secondary-container: #4A4228; --outline-variant: #484020;
+  --bg: #141000; --surface: #141000;
+  --surface-container: #201C00; --surface-container-high: #2A2600; --surface-container-highest: #363000;
 }
 
 /* ─── DAY MODE (light) ─── */
@@ -163,6 +226,30 @@
   --primary-container: #A0EEFA; --on-primary-container: #001F26;
   --bg: #F0FEFF; --surface: #F0FEFF;
   --surface-container: #E0F8FC; --surface-container-high: #D0ECEF; --surface-container-highest: #C0E0E5;
+}
+[data-mode="day"][data-theme="rosegold"] {
+  --primary: #8B3A20; --on-primary: #FFFFFF;
+  --primary-container: #FFDBD1; --on-primary-container: #360E00;
+  --bg: #FFF6F4; --surface: #FFF6F4;
+  --surface-container: #F8EDEA; --surface-container-high: #F0E0DC; --surface-container-highest: #E8D4CF;
+}
+[data-mode="day"][data-theme="mint"] {
+  --primary: #006845; --on-primary: #FFFFFF;
+  --primary-container: #8EFAD5; --on-primary-container: #002015;
+  --bg: #F0FFF8; --surface: #F0FFF8;
+  --surface-container: #E0F8ED; --surface-container-high: #D0EEDE; --surface-container-highest: #C0E4D0;
+}
+[data-mode="day"][data-theme="indigo"] {
+  --primary: #3300CC; --on-primary: #FFFFFF;
+  --primary-container: #E2E0FF; --on-primary-container: #06006F;
+  --bg: #F4F4FF; --surface: #F4F4FF;
+  --surface-container: #EAE8FF; --surface-container-high: #DCDCF8; --surface-container-highest: #D0D0F0;
+}
+[data-mode="day"][data-theme="amber"] {
+  --primary: #7A4800; --on-primary: #FFFFFF;
+  --primary-container: #FFDE80; --on-primary-container: #271600;
+  --bg: #FFFBF0; --surface: #FFFBF0;
+  --surface-container: #F8F0D8; --surface-container-high: #EEE4C4; --surface-container-highest: #E4D8B0;
 }
 
 /* ═══════════════════════════════════════
@@ -308,14 +395,18 @@ body {
 }
 .theme-dot:hover { transform: scale(1.3); }
 .theme-dot.active { border-color: white; transform: scale(1.25); box-shadow: 0 0 0 2px rgba(255,255,255,0.3); }
-.theme-dot[data-color="blue"]   { background: #38bdf8; }
-.theme-dot[data-color="red"]    { background: #ef4444; }
-.theme-dot[data-color="pink"]   { background: #ec4899; }
-.theme-dot[data-color="green"]  { background: #10b981; }
-.theme-dot[data-color="orange"] { background: #f97316; }
-.theme-dot[data-color="purple"] { background: #a855f7; }
-.theme-dot[data-color="yellow"] { background: #eab308; }
-.theme-dot[data-color="cyan"]   { background: #06b6d4; }
+.theme-dot[data-color="blue"]     { background: #38bdf8; }
+.theme-dot[data-color="red"]      { background: #ef4444; }
+.theme-dot[data-color="pink"]     { background: #ec4899; }
+.theme-dot[data-color="green"]    { background: #10b981; }
+.theme-dot[data-color="orange"]   { background: #f97316; }
+.theme-dot[data-color="purple"]   { background: #a855f7; }
+.theme-dot[data-color="yellow"]   { background: #eab308; }
+.theme-dot[data-color="cyan"]     { background: #06b6d4; }
+.theme-dot[data-color="rosegold"] { background: linear-gradient(135deg, #e8927c, #f4c2a8); }
+.theme-dot[data-color="mint"]     { background: #34d399; }
+.theme-dot[data-color="indigo"]   { background: #6366f1; }
+.theme-dot[data-color="amber"]    { background: #f59e0b; }
 
 /* ─── Theme Popup ─── */
 #themePopup {
@@ -331,7 +422,7 @@ body {
   opacity: 0; transform: scale(0.9) translateY(-6px);
   transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
   pointer-events: none;
-  width: 168px;
+  width: 192px;
 }
 #themePopup.open {
   opacity: 1; transform: none;
@@ -775,8 +866,24 @@ body {
 .error-shake { animation: shake 0.42s ease-in-out; box-shadow: 0 0 0 3px rgba(255,180,171,0.25) !important; }
 
 /* ═══════════════════════════════════════
-   UTILITY
+   PULL TO REFRESH
 ═══════════════════════════════════════ */
+#ptr-indicator {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  height: 0; overflow: hidden;
+  color: var(--primary);
+  font-size: 0.875rem; font-weight: 500;
+  transition: height 200ms var(--ease-out);
+}
+#ptr-indicator.pulling { height: 48px; }
+#ptr-indicator.refreshing { height: 48px; }
+#ptr-indicator .ptr-icon {
+  font-size: 1.2rem;
+  transition: transform 300ms var(--ease-out);
+}
+#ptr-indicator.pulling .ptr-icon { transform: rotate(180deg); }
+#ptr-indicator.refreshing .ptr-icon { animation: spin 700ms linear infinite; }
+
 .hidden { display: none !important; }
 @media (max-width: 520px) {
   .container { padding: 0 12px 100px; }
@@ -796,6 +903,11 @@ body {
 </div>
 
 
+
+<div id="ptr-indicator">
+  <span class="material-icons-round ptr-icon">refresh</span>
+  <span id="ptr-text">Pull to refresh</span>
+</div>
 
 <div class="container">
 
@@ -836,14 +948,18 @@ body {
               <span class="material-icons-round palette-icon">palette</span>
             </button>
             <div id="themePopup">
-              <span class="theme-dot active" data-color="blue"></span>
-              <span class="theme-dot" data-color="red"></span>
-              <span class="theme-dot" data-color="pink"></span>
-              <span class="theme-dot" data-color="green"></span>
-              <span class="theme-dot" data-color="orange"></span>
-              <span class="theme-dot" data-color="purple"></span>
-              <span class="theme-dot" data-color="yellow"></span>
-              <span class="theme-dot" data-color="cyan"></span>
+              <span class="theme-dot active" data-color="blue" title="Blue"></span>
+              <span class="theme-dot" data-color="red" title="Red"></span>
+              <span class="theme-dot" data-color="pink" title="Pink"></span>
+              <span class="theme-dot" data-color="green" title="Green"></span>
+              <span class="theme-dot" data-color="orange" title="Orange"></span>
+              <span class="theme-dot" data-color="purple" title="Purple"></span>
+              <span class="theme-dot" data-color="yellow" title="Yellow"></span>
+              <span class="theme-dot" data-color="cyan" title="Cyan"></span>
+              <span class="theme-dot" data-color="rosegold" title="Rose Gold"></span>
+              <span class="theme-dot" data-color="mint" title="Mint"></span>
+              <span class="theme-dot" data-color="indigo" title="Indigo"></span>
+              <span class="theme-dot" data-color="amber" title="Amber"></span>
             </div>
           </div>
         </div>
@@ -1083,7 +1199,9 @@ function updateParticleColor(t) {
     blue:'rgba(56,189,248,0.4)', red:'rgba(239,68,68,0.4)',
     pink:'rgba(236,72,153,0.4)', green:'rgba(16,185,129,0.4)',
     orange:'rgba(249,115,22,0.4)', purple:'rgba(168,85,247,0.4)',
-    yellow:'rgba(234,179,8,0.4)', cyan:'rgba(6,182,212,0.4)'
+    yellow:'rgba(234,179,8,0.4)', cyan:'rgba(6,182,212,0.4)',
+    rosegold:'rgba(232,146,124,0.4)', mint:'rgba(52,211,153,0.4)',
+    indigo:'rgba(99,102,241,0.4)', amber:'rgba(245,158,11,0.4)'
   };
   pColor = map[t] || map.blue;
 }
@@ -1189,6 +1307,11 @@ function renderCards(data) {
   cardsGrid.innerHTML = '';
   const keys = Object.keys(data);
   totalCount.textContent = `Total: ${keys.length}`;
+  // Sort by date ascending for serial numbering (oldest = 01)
+  const sortedAsc = [...keys].sort((a, b) => new Date(data[a].updatedAt) - new Date(data[b].updatedAt));
+  const serialMap = {};
+  sortedAsc.forEach((k, i) => { serialMap[k] = String(i + 1).padStart(2, '0'); });
+  // Display newest first
   keys.sort((a, b) => new Date(data[b].updatedAt) - new Date(data[a].updatedAt));
 
   if (keys.length === 0) {
@@ -1206,7 +1329,7 @@ function renderCards(data) {
     const dateStr = (item.updatedAt || '').split(',')[0] || '—';
     const chars   = item.chars || 0;
     const views   = item.views || 0;
-    const serial  = String(idx + 1).padStart(2, '0');
+    const serial  = serialMap[key];
 
     const card = document.createElement('div');
     card.className = 'card ripple-surface';
@@ -1385,6 +1508,51 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+
+/* ════════════════════════════════
+   PULL TO REFRESH
+════════════════════════════════ */
+(function() {
+  const ptrEl   = document.getElementById('ptr-indicator');
+  const ptrText = document.getElementById('ptr-text');
+  let startY = 0, pulling = false, triggered = false;
+  const THRESHOLD = 72;
+
+  document.addEventListener('touchstart', e => {
+    if (window.scrollY === 0) { startY = e.touches[0].clientY; pulling = true; triggered = false; }
+  }, { passive: true });
+
+  document.addEventListener('touchmove', e => {
+    if (!pulling) return;
+    const dy = e.touches[0].clientY - startY;
+    if (dy > 0 && window.scrollY === 0) {
+      const progress = Math.min(dy / THRESHOLD, 1);
+      if (progress > 0.1) {
+        ptrEl.classList.add('pulling');
+        ptrText.textContent = dy >= THRESHOLD ? 'Release to refresh' : 'Pull to refresh';
+      }
+      if (dy >= THRESHOLD && !triggered) triggered = true;
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => {
+    if (!pulling) return;
+    pulling = false;
+    if (triggered) {
+      ptrEl.classList.remove('pulling');
+      ptrEl.classList.add('refreshing');
+      ptrText.textContent = 'Refreshing...';
+      setTimeout(() => {
+        window.refreshApps();
+        ptrEl.classList.remove('refreshing');
+        ptrText.textContent = 'Pull to refresh';
+      }, 900);
+    } else {
+      ptrEl.classList.remove('pulling');
+    }
+    triggered = false;
+  });
+})();
 </script>
 </body>
 </html>
