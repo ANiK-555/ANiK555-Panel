@@ -278,9 +278,12 @@ body {
   color: var(--on-surface);
   min-height: 100dvh;
   overflow-x: hidden;
-  transition: background var(--dur-long) var(--standard), color var(--dur-med) var(--standard);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeSpeed;
+}
+/* Apply transition only after page loads - prevents flash */
+body.loaded {
+  transition: background var(--dur-long) var(--standard), color var(--dur-med) var(--standard);
 }
 
 /* particles */
@@ -332,14 +335,14 @@ body {
 }
 
 /* ═══════════════════════════════════════
-   MATERIAL EXPRESSIVE DELETE DIALOG
+   MATERIAL EXPRESSIVE DIALOGS (center)
 ═══════════════════════════════════════ */
 .m3-dialog-scrim {
   position: fixed; inset: 0; z-index: 8000;
   background: var(--scrim);
-  backdrop-filter: blur(4px);
-  display: flex; align-items: flex-end; justify-content: center;
-  padding: 0 16px 24px;
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px 20px;
   opacity: 0;
   transition: opacity var(--dur-med) var(--standard);
   pointer-events: none;
@@ -349,63 +352,92 @@ body {
   pointer-events: auto;
 }
 .m3-dialog {
-  width: 100%; max-width: 400px;
+  width: 100%; max-width: 360px;
   background: var(--surface-container-highest);
   border: 1px solid var(--outline-variant);
   border-radius: var(--r-2xl);
-  padding: 24px 24px 20px;
-  box-shadow: 0 12px 48px rgba(0,0,0,0.7);
-  transform: translateY(40px) scale(0.95);
-  transition: transform var(--dur-med) var(--spring);
+  padding: 28px 24px 22px;
+  box-shadow: 0 16px 56px rgba(0,0,0,0.75),
+              0 0 0 1px rgba(255,255,255,0.04);
+  transform: scale(0.88) translateY(12px);
+  opacity: 0;
+  transition: transform var(--dur-med) var(--spring),
+              opacity var(--dur-med) var(--standard);
 }
 .m3-dialog-scrim.open .m3-dialog {
-  transform: none;
+  transform: scale(1) translateY(0);
+  opacity: 1;
 }
 .m3-dialog-icon {
-  width: 48px; height: 48px;
+  width: 52px; height: 52px;
   border-radius: var(--r-full);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.m3-dialog-icon.error-icon {
   background: color-mix(in srgb, var(--error) 15%, transparent);
   border: 1.5px solid color-mix(in srgb, var(--error) 35%, transparent);
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 16px;
 }
-.m3-dialog-icon .material-icons-round { color: var(--error); font-size: 1.4rem; }
+.m3-dialog-icon.warning-icon {
+  background: color-mix(in srgb, #f59e0b 15%, transparent);
+  border: 1.5px solid color-mix(in srgb, #f59e0b 35%, transparent);
+}
+.m3-dialog-icon.error-icon .material-icons-round { color: var(--error); font-size: 1.5rem; }
+.m3-dialog-icon.warning-icon .material-icons-round { color: #fbbf24; font-size: 1.5rem; }
 .m3-dialog-title {
   font-family: 'Google Sans Display', sans-serif;
-  font-size: 1.2rem; font-weight: 700;
+  font-size: 1.25rem; font-weight: 700;
   color: var(--on-surface);
-  margin-bottom: 8px;
+  text-align: center;
+  margin-bottom: 10px;
 }
 .m3-dialog-body {
   font-size: 0.9rem; color: var(--on-surface-variant);
-  line-height: 1.55; margin-bottom: 24px;
+  line-height: 1.6; margin-bottom: 26px;
+  text-align: center;
 }
 .m3-dialog-body strong { color: var(--on-surface); font-weight: 600; }
 .m3-dialog-actions {
-  display: flex; gap: 10px; justify-content: flex-end;
+  display: flex; gap: 10px;
 }
+.m3-dialog-actions.col { flex-direction: column; }
 .m3-dialog-btn {
-  padding: 10px 20px;
+  flex: 1;
+  padding: 12px 20px;
   border-radius: var(--r-full);
   border: none; cursor: pointer;
   font-family: 'Google Sans', sans-serif;
-  font-size: 0.9rem; font-weight: 600;
-  transition: all var(--dur-short) var(--standard);
-  display: flex; align-items: center; gap: 6px;
+  font-size: 0.9375rem; font-weight: 600;
+  transition: all var(--dur-short) var(--spring);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  letter-spacing: 0.01em;
 }
-.m3-dialog-btn .material-icons-round { font-size: 1rem; }
+.m3-dialog-btn:active { transform: scale(0.96); }
+.m3-dialog-btn .material-icons-round { font-size: 1.05rem; }
 .m3-dialog-btn-cancel {
   background: var(--surface-container-high);
   color: var(--on-surface-variant);
   border: 1px solid var(--outline-variant);
 }
-.m3-dialog-btn-cancel:hover { background: var(--surface-container-highest); }
+.m3-dialog-btn-cancel:hover { background: var(--surface-container-highest); color: var(--on-surface); }
 .m3-dialog-btn-delete {
-  background: var(--error-container, #93000A);
+  background: color-mix(in srgb, var(--error) 18%, var(--surface-container-highest));
   color: var(--error);
   border: 1px solid color-mix(in srgb, var(--error) 30%, transparent);
 }
-.m3-dialog-btn-delete:hover { filter: brightness(1.2); }
+.m3-dialog-btn-delete:hover { background: color-mix(in srgb, var(--error) 28%, var(--surface-container-highest)); }
+.m3-dialog-btn-discard {
+  background: color-mix(in srgb, #f59e0b 18%, var(--surface-container-highest));
+  color: #fbbf24;
+  border: 1px solid color-mix(in srgb, #f59e0b 30%, transparent);
+}
+.m3-dialog-btn-discard:hover { background: color-mix(in srgb, #f59e0b 28%, var(--surface-container-highest)); }
+.m3-dialog-btn-keep {
+  background: var(--primary);
+  color: var(--on-primary);
+  border: none;
+}
+.m3-dialog-btn-keep:hover { filter: brightness(1.1); }
 
 /* TOP APP BAR — hidden/removed */
 .top-bar { display: none !important; }
@@ -433,10 +465,54 @@ body {
   border-radius: var(--r-2xl);
   padding: 20px;
   margin: 16px 0;
-  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+  position: relative;
   box-shadow: 0 4px 24px rgba(0,0,0,0.4);
   animation: springUp var(--dur-long) var(--spring) both;
+  /* thin border via inset shadow - no z-index clash */
+  outline: 1.5px solid transparent;
 }
+/* Animated glowing thin border all sides */
+.hero-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-2xl);
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--hero-angle, 0deg),
+    color-mix(in srgb, var(--primary) 80%, transparent),
+    color-mix(in srgb, var(--primary) 20%, transparent) 30%,
+    color-mix(in srgb, var(--primary) 60%, transparent) 60%,
+    color-mix(in srgb, var(--primary) 90%, transparent) 80%,
+    color-mix(in srgb, var(--primary) 80%, transparent)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: hero-border-spin 6s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Solid thin fallback border underneath */
+.hero-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-2xl);
+  border: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+@property --hero-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes hero-border-spin {
+  to { --hero-angle: 360deg; }
+}
+.hero-card > * { position: relative; z-index: 1; }
+
 @keyframes springUp {
   from { opacity: 0; transform: translateY(24px) scale(0.96); }
   to   { opacity: 1; transform: none; }
@@ -447,6 +523,12 @@ body {
   font-size: 1.6rem; font-weight: 700;
   color: var(--on-primary-container);
   display: flex; align-items: center; gap: 8px;
+  animation: slideInLeft 500ms var(--spring) both;
+  animation-delay: 100ms;
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: none; }
 }
 .live-dot {
   width: 9px; height: 9px; border-radius: 50%;
@@ -455,8 +537,8 @@ body {
   animation: pulse-live 2s ease-in-out infinite;
 }
 @keyframes pulse-live {
-  0%,100% { box-shadow: 0 0 0 3px rgba(74,222,128,0.25); }
-  50%      { box-shadow: 0 0 0 8px rgba(74,222,128,0.08); }
+  0%,100% { box-shadow: 0 0 0 3px rgba(74,222,128,0.25); transform: scale(1); }
+  50%      { box-shadow: 0 0 0 8px rgba(74,222,128,0.08); transform: scale(1.15); }
 }
 
 /* ─── Theme Dots ─── */
@@ -514,9 +596,21 @@ body {
   transition: all 250ms var(--spring);
   flex-shrink: 0;
   backdrop-filter: blur(8px);
+  animation: iconPopIn 400ms var(--spring) both;
+  animation-delay: 200ms;
 }
 .day-night-btn:hover { transform: scale(1.12); background: rgba(0,0,0,0.4); }
-.day-night-btn .material-icons-round { font-size: 1.1rem; }
+.day-night-btn:active { transform: scale(0.9) rotate(-20deg); }
+.day-night-btn .material-icons-round {
+  font-size: 1.1rem;
+  transition: transform 350ms var(--spring);
+}
+.day-night-btn:hover .material-icons-round { transform: rotate(20deg) scale(1.1); }
+
+@keyframes iconPopIn {
+  from { opacity: 0; transform: scale(0.5) rotate(-15deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0deg); }
+}
 
 /* ─── Refresh Button (hero) ─── */
 .refresh-hero-btn {
@@ -530,8 +624,11 @@ body {
   transition: all 250ms var(--spring);
   flex-shrink: 0;
   backdrop-filter: blur(8px);
+  animation: iconPopIn 400ms var(--spring) both;
+  animation-delay: 150ms;
 }
-.refresh-hero-btn:hover { transform: scale(1.12) rotate(180deg); background: rgba(0,0,0,0.4); }
+.refresh-hero-btn:hover { transform: scale(1.12); background: rgba(0,0,0,0.4); }
+.refresh-hero-btn:active .material-icons-round { animation: spin 600ms linear; }
 .refresh-hero-btn .material-icons-round { font-size: 1.15rem; }
 
 /* ─── Color Palette Button (M3 Tonal Icon Button) ─── */
@@ -547,6 +644,8 @@ body {
   flex-shrink: 0;
   overflow: hidden;
   backdrop-filter: blur(8px);
+  animation: iconPopIn 400ms var(--spring) both;
+  animation-delay: 250ms;
 }
 /* Spinning rainbow ring */
 .palette-btn::before {
@@ -625,6 +724,8 @@ body {
   border-radius: var(--r-full);
   border: 1px solid var(--outline-variant);
   margin-bottom: 16px;
+  animation: springUp 400ms var(--spring) both;
+  animation-delay: 80ms;
 }
 .tab-btn {
   flex: 1;
@@ -638,17 +739,23 @@ body {
   cursor: pointer;
   transition: all var(--dur-med) var(--ease-out);
 }
-.tab-btn .material-icons-round { font-size: 1.1rem; }
+.tab-btn .material-icons-round {
+  font-size: 1.1rem;
+  transition: transform 300ms var(--spring);
+}
+.tab-btn:hover .material-icons-round { transform: scale(1.2) rotate(-5deg); }
+.tab-btn.active .material-icons-round { transform: scale(1.1); }
 .tab-btn.active {
   background: var(--primary);
   color: var(--on-primary);
   box-shadow: 0 2px 8px rgba(0,0,0,0.35);
 }
 @keyframes tab-pop {
-  from { transform: scale(0.92); }
-  to   { transform: scale(1); }
+  0%   { transform: scale(0.88); }
+  60%  { transform: scale(1.04); }
+  100% { transform: scale(1); }
 }
-.tab-btn.active { animation: tab-pop var(--dur-short) var(--spring); }
+.tab-btn.active { animation: tab-pop var(--dur-med) var(--spring); }
 
 /* ═══════════════════════════════════════
    SEARCH BAR
@@ -695,33 +802,9 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   animation: card-in var(--dur-med) var(--ease-out) both;
   transition: transform var(--dur-short) var(--standard),
-              box-shadow var(--dur-short) var(--standard),
-              border-color var(--dur-short) var(--standard);
-  position: relative;
-  overflow: hidden;
+              box-shadow var(--dur-short) var(--standard);
 }
-/* Thin accent line on left side */
-.card::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 16px; bottom: 16px;
-  width: 3px;
-  border-radius: 0 var(--r-full) var(--r-full) 0;
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--primary) 80%, transparent),
-    color-mix(in srgb, var(--primary) 20%, transparent)
-  );
-  opacity: 0.7;
-  transition: opacity var(--dur-short) var(--standard),
-              height var(--dur-short) var(--standard);
-}
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-  border-color: color-mix(in srgb, var(--primary) 35%, var(--outline-variant));
-}
-.card:hover::before { opacity: 1; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
 @keyframes card-in {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: none; }
@@ -917,9 +1000,21 @@ body {
   z-index: 50;
   transition: all var(--dur-med) var(--ease-out);
   transform-origin: bottom right;
+  animation: fabBounceIn 500ms var(--spring) both;
+  animation-delay: 300ms;
+}
+@keyframes fabBounceIn {
+  0%   { opacity: 0; transform: scale(0) rotate(-45deg); }
+  70%  { transform: scale(1.12) rotate(5deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 .fab:hover { transform: scale(1.1) translateY(-2px); box-shadow: 0 10px 32px rgba(0,0,0,0.6); }
-.fab .material-icons-round { font-size: 1.75rem; }
+.fab:active { transform: scale(0.93); }
+.fab .material-icons-round {
+  font-size: 1.75rem;
+  transition: transform 300ms var(--spring);
+}
+.fab:hover .material-icons-round { transform: rotate(90deg) scale(1.1); }
 .fab.fab-hidden {
   transform: scale(0) translateY(20px);
   opacity: 0;
@@ -1009,7 +1104,7 @@ body {
 <div class="container">
 
   <!-- ══ LOGIN ══ -->
-  <div id="loginSection" class="hidden ripple-surface">
+  <div id="loginSection" class="ripple-surface">
     <h2>Admin Access</h2>
     <div class="login-fields">
       <input class="m3-input" type="email" id="email" placeholder="Email" autocomplete="email">
@@ -1124,12 +1219,12 @@ body {
 <!-- DELETE CONFIRM DIALOG (Material Expressive 3) -->
 <div class="m3-dialog-scrim" id="deleteDialog">
   <div class="m3-dialog ripple-surface">
-    <div class="m3-dialog-icon">
+    <div class="m3-dialog-icon error-icon">
       <span class="material-icons-round">delete_forever</span>
     </div>
     <div class="m3-dialog-title">Delete Paste?</div>
-    <div class="m3-dialog-body" id="deleteDialogBody">
-      This will permanently remove <strong id="deleteDialogName"></strong> from the database.
+    <div class="m3-dialog-body">
+      This will permanently remove <strong id="deleteDialogName"></strong> from the database. This action cannot be undone.
     </div>
     <div class="m3-dialog-actions">
       <button class="m3-dialog-btn m3-dialog-btn-cancel ripple-surface" id="deleteCancelBtn">
@@ -1137,6 +1232,27 @@ body {
       </button>
       <button class="m3-dialog-btn m3-dialog-btn-delete ripple-surface" id="deleteConfirmBtn">
         <span class="material-icons-round">delete_forever</span> Delete
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- DISCARD CHANGES DIALOG (Material Expressive 3) -->
+<div class="m3-dialog-scrim" id="discardDialog">
+  <div class="m3-dialog ripple-surface">
+    <div class="m3-dialog-icon warning-icon">
+      <span class="material-icons-round">edit_off</span>
+    </div>
+    <div class="m3-dialog-title">Discard Changes?</div>
+    <div class="m3-dialog-body">
+      You have unsaved changes. If you go back now, your edits will be lost.
+    </div>
+    <div class="m3-dialog-actions">
+      <button class="m3-dialog-btn m3-dialog-btn-keep ripple-surface" id="discardCancelBtn">
+        <span class="material-icons-round">edit</span> Keep Editing
+      </button>
+      <button class="m3-dialog-btn m3-dialog-btn-discard ripple-surface" id="discardConfirmBtn">
+        <span class="material-icons-round">arrow_back</span> Discard
       </button>
     </div>
   </div>
@@ -1378,11 +1494,18 @@ function openEditorAdd() {
   appNameInput.value    = '';
   appNameInput.disabled = false;
   jsonInputArea.value   = '';
+  originalEditorContent = ''; // reset tracking
   setTimeout(autoResize, 50);
   switchTab('editor');
 }
 
-tabMyPastes.addEventListener('click', () => switchTab('list'));
+tabMyPastes.addEventListener('click', () => {
+  if (currentTab === 'editor' && hasEditorChanges()) {
+    showDiscardDialog(() => switchTab('list'));
+  } else {
+    switchTab('list');
+  }
+});
 tabCreate.addEventListener('click', openEditorAdd);
 btnAddNew.addEventListener('click', openEditorAdd);
 
@@ -1390,7 +1513,7 @@ btnAddNew.addEventListener('click', openEditorAdd);
    AUTH STATE
 ════════════════════════════════ */
 onAuthStateChanged(auth, user => {
-  // No loading screen - instant display
+  // Instant display - no loading screen
   if (user) {
     currentUserUid = user.uid;
     let name = user.email.split('@')[0];
@@ -1399,14 +1522,13 @@ onAuthStateChanged(auth, user => {
 
     loginSection.classList.add('hidden');
     appSection.classList.remove('hidden');
-    // FAB shown only on list tab (default)
     btnAddNew.classList.remove('hidden');
     btnAddNew.classList.remove('fab-hidden');
     loadMetadata();
   } else {
     currentUserUid = null;
     appSection.classList.add('hidden');
-    loginSection.classList.remove('hidden');
+    loginSection.classList.remove('hidden'); // show login immediately
     btnAddNew.classList.add('hidden');
   }
 });
@@ -1541,11 +1663,14 @@ function attachCardListeners() {
       appNameInput.value    = id;
       appNameInput.disabled = true;
       jsonInputArea.value   = "Fetching data...";
+      originalEditorContent = "Fetching data...";
       switchTab('editor');
       get(ref(db, `api_data/${currentUserUid}/${id}`)).then(snap => {
         if (snap.exists()) {
           const d = snap.val();
-          jsonInputArea.value = (typeof d === 'object' && d !== null) ? JSON.stringify(d, null, 2) : d;
+          const val = (typeof d === 'object' && d !== null) ? JSON.stringify(d, null, 2) : d;
+          jsonInputArea.value   = val;
+          originalEditorContent = val; // track for discard detection
           setTimeout(autoResize, 50);
         }
       });
@@ -1623,6 +1748,15 @@ function escHtml(s) {
 }
 
 /* ════════════════════════════════
+   BODY LOADED CLASS (prevents flash)
+════════════════════════════════ */
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    document.body.classList.add('loaded');
+  });
+});
+
+/* ════════════════════════════════
    DELETE DIALOG (M3 Expressive)
 ════════════════════════════════ */
 const deleteDialog      = document.getElementById('deleteDialog');
@@ -1668,26 +1802,72 @@ deleteConfirmBtn.addEventListener('click', () => {
 });
 
 /* ════════════════════════════════
+   DISCARD DIALOG (M3 Expressive)
+════════════════════════════════ */
+const discardDialog      = document.getElementById('discardDialog');
+const discardCancelBtn   = document.getElementById('discardCancelBtn');
+const discardConfirmBtn  = document.getElementById('discardConfirmBtn');
+let originalEditorContent = '';
+let pendingDiscardAction  = null; // function to run after discard confirmed
+
+function hasEditorChanges() {
+  return jsonInputArea.value.trim() !== originalEditorContent.trim();
+}
+
+function showDiscardDialog(onDiscard) {
+  pendingDiscardAction = onDiscard;
+  discardDialog.classList.add('open');
+  attachAllRipples();
+}
+
+function hideDiscardDialog() {
+  discardDialog.classList.remove('open');
+  pendingDiscardAction = null;
+}
+
+discardCancelBtn.addEventListener('click', hideDiscardDialog);
+discardDialog.addEventListener('click', e => {
+  if (e.target === discardDialog) hideDiscardDialog();
+});
+
+discardConfirmBtn.addEventListener('click', () => {
+  const action = pendingDiscardAction;
+  hideDiscardDialog();
+  if (action) action();
+});
+
+/* ════════════════════════════════
    ANDROID BACK BUTTON HANDLER
 ════════════════════════════════ */
-// Push initial state so back button is interceptable
 history.pushState({ tab: 'list' }, '');
 
 window.addEventListener('popstate', e => {
-  // If delete dialog is open, close it
+  // If any dialog is open, close it
   if (deleteDialog.classList.contains('open')) {
     hideDeleteDialog();
     history.pushState({ tab: currentTab }, '');
     return;
   }
-  // If on Editor tab, go back to My Paste's
-  if (currentTab === 'editor') {
-    switchTab('list');
-    history.pushState({ tab: 'list' }, '');
+  if (discardDialog.classList.contains('open')) {
+    hideDiscardDialog();
+    history.pushState({ tab: currentTab }, '');
     return;
   }
-  // If on My Paste's tab, allow app to exit (don't push state)
-  // Browser/WebView will handle exit naturally
+  // If on Editor tab, check for unsaved changes
+  if (currentTab === 'editor') {
+    if (hasEditorChanges()) {
+      showDiscardDialog(() => {
+        switchTab('list');
+        history.pushState({ tab: 'list' }, '');
+      });
+      history.pushState({ tab: 'editor' }, ''); // re-push to keep state
+    } else {
+      switchTab('list');
+      history.pushState({ tab: 'list' }, '');
+    }
+    return;
+  }
+  // If on My Paste's tab, allow exit naturally
 });
 
 /* ════════════════════════════════
