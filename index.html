@@ -609,7 +609,7 @@ body.loaded {
   border-radius: var(--r-xl);
   padding: 14px;
   display: flex; flex-wrap: wrap; gap: 10px;
-  z-index: 9000;
+  z-index: 9999;
   box-shadow: 0 8px 32px rgba(0,0,0,0.6);
   backdrop-filter: blur(16px);
   opacity: 0; transform: scale(0.9) translateY(-6px);
@@ -723,7 +723,7 @@ body.loaded {
 .palette-btn:hover::before { transform: rotate(180deg); }
 .palette-btn:hover .palette-icon { transform: rotate(-20deg) scale(1.15); }
 .palette-btn:active { transform: scale(0.92); }
-.palette-btn-wrap { position: relative; z-index: 100; }
+.palette-btn-wrap { flex-shrink: 0; }
 
 /* ─── Profile Chip ─── */
 .profile-chip {
@@ -1179,20 +1179,6 @@ body.loaded {
             <button class="palette-btn ripple-surface squiggle" id="paletteBtn" title="Change Color Theme">
               <span class="material-icons-round palette-icon">palette</span>
             </button>
-            <div id="themePopup">
-              <span class="theme-dot active" data-color="blue" title="Blue"></span>
-              <span class="theme-dot" data-color="red" title="Red"></span>
-              <span class="theme-dot" data-color="pink" title="Pink"></span>
-              <span class="theme-dot" data-color="green" title="Green"></span>
-              <span class="theme-dot" data-color="orange" title="Orange"></span>
-              <span class="theme-dot" data-color="purple" title="Purple"></span>
-              <span class="theme-dot" data-color="yellow" title="Yellow"></span>
-              <span class="theme-dot" data-color="cyan" title="Cyan"></span>
-              <span class="theme-dot" data-color="rosegold" title="Rose Gold"></span>
-              <span class="theme-dot" data-color="mint" title="Mint"></span>
-              <span class="theme-dot" data-color="indigo" title="Indigo"></span>
-              <span class="theme-dot" data-color="amber" title="Amber"></span>
-            </div>
           </div>
         </div>
       </div>
@@ -1302,6 +1288,22 @@ body.loaded {
 <button class="fab squiggle ripple-surface hidden" id="btnAddNew">
   <span class="material-icons-round">add</span>
 </button>
+
+<!-- THEME POPUP — body-level, outside all stacking contexts -->
+<div id="themePopup">
+  <span class="theme-dot active" data-color="blue" title="Blue"></span>
+  <span class="theme-dot" data-color="red" title="Red"></span>
+  <span class="theme-dot" data-color="pink" title="Pink"></span>
+  <span class="theme-dot" data-color="green" title="Green"></span>
+  <span class="theme-dot" data-color="orange" title="Orange"></span>
+  <span class="theme-dot" data-color="purple" title="Purple"></span>
+  <span class="theme-dot" data-color="yellow" title="Yellow"></span>
+  <span class="theme-dot" data-color="cyan" title="Cyan"></span>
+  <span class="theme-dot" data-color="rosegold" title="Rose Gold"></span>
+  <span class="theme-dot" data-color="mint" title="Mint"></span>
+  <span class="theme-dot" data-color="indigo" title="Indigo"></span>
+  <span class="theme-dot" data-color="amber" title="Amber"></span>
+</div>
 
 <!-- ════════════════════════════════════════
      FIREBASE + APP LOGIC (exact from app.js)
