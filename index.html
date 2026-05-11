@@ -358,19 +358,32 @@ body.loaded {
   position: relative;
   overflow: hidden;
 }
-/* Thin colored side accent line */
+/* Full rounded thin glow border */
 .m3-dialog::before {
   content: '';
   position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 3.5px;
-  border-radius: var(--r-2xl) 0 0 var(--r-2xl);
+  inset: 0;
+  border-radius: var(--r-2xl);
+  padding: 1px;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
 }
 .m3-dialog.delete-dialog::before {
-  background: linear-gradient(180deg, var(--error), color-mix(in srgb, var(--error) 30%, transparent));
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--error) 80%, transparent),
+    color-mix(in srgb, var(--error) 30%, transparent) 50%,
+    color-mix(in srgb, var(--error) 60%, transparent)
+  );
 }
 .m3-dialog.discard-dialog::before {
-  background: linear-gradient(180deg, #f59e0b, color-mix(in srgb, #f59e0b 30%, transparent));
+  background: linear-gradient(135deg,
+    color-mix(in srgb, #f59e0b 80%, transparent),
+    color-mix(in srgb, #f59e0b 25%, transparent) 50%,
+    color-mix(in srgb, #f59e0b 60%, transparent)
+  );
 }
 .m3-dialog-scrim.open .m3-dialog {
   transform: scale(1) translateY(0);
@@ -590,13 +603,13 @@ body.loaded {
 
 /* ─── Theme Popup ─── */
 #themePopup {
-  position: absolute; right: 0; top: calc(100% + 10px);
+  position: fixed;
   background: var(--surface-container-highest);
   border: 1px solid var(--outline-variant);
   border-radius: var(--r-xl);
   padding: 14px;
   display: flex; flex-wrap: wrap; gap: 10px;
-  z-index: 200;
+  z-index: 9000;
   box-shadow: 0 8px 32px rgba(0,0,0,0.6);
   backdrop-filter: blur(16px);
   opacity: 0; transform: scale(0.9) translateY(-6px);
@@ -1424,6 +1437,18 @@ dayNightBtn.addEventListener('click', () => {
 // Palette popup toggle
 paletteBtn.addEventListener('click', (e) => {
   e.stopPropagation();
+  const isOpen = themePopup.classList.contains('open');
+  if (!isOpen) {
+    const rect = paletteBtn.getBoundingClientRect();
+    const popupWidth = 192;
+    let left = rect.right - popupWidth;
+    let top  = rect.bottom + 10;
+    // keep within viewport
+    if (left < 8) left = 8;
+    if (left + popupWidth > window.innerWidth - 8) left = window.innerWidth - popupWidth - 8;
+    themePopup.style.left = left + 'px';
+    themePopup.style.top  = top  + 'px';
+  }
   themePopup.classList.toggle('open');
 });
 document.addEventListener('click', () => themePopup.classList.remove('open'));
@@ -1502,16 +1527,16 @@ function switchTab(tab) {
   if (tab === 'list') {
     tabMyPastes.classList.add('active'); tabCreate.classList.remove('active');
     viewList.classList.remove('hidden');  viewEditor.classList.add('hidden');
-    // Show FAB - remove both classes to be safe
+    // Show FAB with animation
     btnAddNew.classList.remove('hidden');
-    btnAddNew.classList.remove('fab-hidden');
+    requestAnimationFrame(() => btnAddNew.classList.remove('fab-hidden'));
   } else {
     tabCreate.classList.add('active'); tabMyPastes.classList.remove('active');
     viewEditor.classList.remove('hidden'); viewList.classList.add('hidden');
     scrollTo({ top: 0, behavior: 'smooth' });
-    // Hide FAB using fab-hidden (animated), keep it in DOM
-    btnAddNew.classList.remove('hidden');
+    // Hide FAB completely when in editor
     btnAddNew.classList.add('fab-hidden');
+    setTimeout(() => btnAddNew.classList.add('hidden'), 300);
   }
 }
 
@@ -1610,6 +1635,7 @@ function renderCards(data) {
     const item   = data[key];
     const rawUrl = `${dbUrl}/api_data/${currentUserUid}/${encodeURIComponent(key)}.json`;
     const dateStr = (item.updatedAt || '').split(',')[0] || '—';
+    const timeStr = (item.updatedAt || '').split(',')[1]?.trim() || '';
     const chars   = item.chars || 0;
     const views   = item.views || 0;
     const serial  = serialMap[key];
@@ -1638,6 +1664,7 @@ function renderCards(data) {
       </div>
       <div class="card-meta">
         <span class="meta-item"><span class="material-icons-round">calendar_month</span>${dateStr}</span>
+        ${timeStr ? `<span class="meta-item"><span class="material-icons-round">schedule</span>${timeStr}</span>` : ''}
         <span class="meta-item"><span class="material-icons-round">description</span>${chars} chars</span>
         <span class="meta-item"><span class="material-icons-round">visibility</span>${views} views</span>
       </div>`;
