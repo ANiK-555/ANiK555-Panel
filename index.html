@@ -84,14 +84,14 @@
   --bg: #180810; --surface: #180810;
   --surface-container: #24101C; --surface-container-high: #2F1A26; --surface-container-highest: #3A2230;
 }
-/* ─── GREEN THEME ─── */
-[data-theme="green"] {
-  --seed: #10b981; --seed-rgb: 16,185,129;
-  --primary: #6CDBB0; --on-primary: #003826;
-  --primary-container: #005238; --on-primary-container: #89F8CC;
-  --secondary-container: #354A42; --outline-variant: #304540;
-  --bg: #081210; --surface: #081210;
-  --surface-container: #101C18; --surface-container-high: #1A2620; --surface-container-highest: #24302A;
+/* ─── TEAL THEME ─── */
+[data-theme="teal"] {
+  --seed: #0d9488; --seed-rgb: 13,148,136;
+  --primary: #5ECFCA; --on-primary: #003735;
+  --primary-container: #004F4C; --on-primary-container: #7EECEA;
+  --secondary-container: #2A4845; --outline-variant: #264240;
+  --bg: #060E0E; --surface: #060E0E;
+  --surface-container: #0E1A1A; --surface-container-high: #182424; --surface-container-highest: #222E2E;
 }
 /* ─── ORANGE THEME ─── */
 [data-theme="orange"] {
@@ -138,14 +138,14 @@
   --bg: #1A0E0A; --surface: #1A0E0A;
   --surface-container: #261614; --surface-container-high: #30201C; --surface-container-highest: #3C2A26;
 }
-/* ─── MINT THEME ─── */
-[data-theme="mint"] {
-  --seed: #34d399; --seed-rgb: 52,211,153;
-  --primary: #70DDB8; --on-primary: #003828;
-  --primary-container: #00523C; --on-primary-container: #8EFAD5;
-  --secondary-container: #30483E; --outline-variant: #2C4238;
-  --bg: #071210; --surface: #071210;
-  --surface-container: #0F1E18; --surface-container-high: #192820; --surface-container-highest: #22322A;
+/* ─── LIME THEME ─── */
+[data-theme="lime"] {
+  --seed: #84cc16; --seed-rgb: 132,204,22;
+  --primary: #BADF6A; --on-primary: #233200;
+  --primary-container: #344900; --on-primary-container: #D5FC82;
+  --secondary-container: #3A4520; --outline-variant: #384018;
+  --bg: #0C1100; --surface: #0C1100;
+  --surface-container: #161D00; --surface-container-high: #202800; --surface-container-highest: #2A3400;
 }
 /* ─── INDIGO THEME ─── */
 [data-theme="indigo"] {
@@ -191,11 +191,11 @@
   --bg: #FFF0F0; --surface: #FFF0F0;
   --surface-container: #F8E8E8; --surface-container-high: #F0DCDC; --surface-container-highest: #E8D0D0;
 }
-[data-mode="day"][data-theme="green"] {
-  --primary: #006C47; --on-primary: #FFFFFF;
-  --primary-container: #ADFCD5; --on-primary-container: #002114;
-  --bg: #F0FFF7; --surface: #F0FFF7;
-  --surface-container: #E0F8EC; --surface-container-high: #D0EEE0; --surface-container-highest: #C0E4D4;
+[data-mode="day"][data-theme="teal"] {
+  --primary: #006860; --on-primary: #FFFFFF;
+  --primary-container: #9EF2EC; --on-primary-container: #00201E;
+  --bg: #F0FFFE; --surface: #F0FFFE;
+  --surface-container: #DFF8F6; --surface-container-high: #CEEEED; --surface-container-highest: #BDE4E2;
 }
 [data-mode="day"][data-theme="pink"] {
   --primary: #9C0060; --on-primary: #FFFFFF;
@@ -233,11 +233,11 @@
   --bg: #FFF6F4; --surface: #FFF6F4;
   --surface-container: #F8EDEA; --surface-container-high: #F0E0DC; --surface-container-highest: #E8D4CF;
 }
-[data-mode="day"][data-theme="mint"] {
-  --primary: #006845; --on-primary: #FFFFFF;
-  --primary-container: #8EFAD5; --on-primary-container: #002015;
-  --bg: #F0FFF8; --surface: #F0FFF8;
-  --surface-container: #E0F8ED; --surface-container-high: #D0EEDE; --surface-container-highest: #C0E4D0;
+[data-mode="day"][data-theme="lime"] {
+  --primary: #3A6000; --on-primary: #FFFFFF;
+  --primary-container: #D5FC82; --on-primary-container: #0F2000;
+  --bg: #F6FFEA; --surface: #F6FFEA;
+  --surface-container: #EAF8D4; --surface-container-high: #DCEEC8; --surface-container-highest: #CEE4BA;
 }
 [data-mode="day"][data-theme="indigo"] {
   --primary: #3300CC; --on-primary: #FFFFFF;
@@ -591,13 +591,13 @@ body.loaded {
 .theme-dot[data-color="blue"]     { background: #38bdf8; }
 .theme-dot[data-color="red"]      { background: #ef4444; }
 .theme-dot[data-color="pink"]     { background: #ec4899; }
-.theme-dot[data-color="green"]    { background: #10b981; }
+.theme-dot[data-color="teal"]     { background: #0d9488; }
 .theme-dot[data-color="orange"]   { background: #f97316; }
 .theme-dot[data-color="purple"]   { background: #a855f7; }
 .theme-dot[data-color="yellow"]   { background: #eab308; }
 .theme-dot[data-color="cyan"]     { background: #06b6d4; }
 .theme-dot[data-color="rosegold"] { background: linear-gradient(135deg, #e8927c, #f4c2a8); }
-.theme-dot[data-color="mint"]     { background: #34d399; }
+.theme-dot[data-color="lime"]     { background: #84cc16; }
 .theme-dot[data-color="indigo"]   { background: #6366f1; }
 .theme-dot[data-color="amber"]    { background: #f59e0b; }
 
@@ -1294,13 +1294,13 @@ body.loaded {
   <span class="theme-dot active" data-color="blue" title="Blue"></span>
   <span class="theme-dot" data-color="red" title="Red"></span>
   <span class="theme-dot" data-color="pink" title="Pink"></span>
-  <span class="theme-dot" data-color="green" title="Green"></span>
+  <span class="theme-dot" data-color="teal" title="Teal"></span>
   <span class="theme-dot" data-color="orange" title="Orange"></span>
   <span class="theme-dot" data-color="purple" title="Purple"></span>
   <span class="theme-dot" data-color="yellow" title="Yellow"></span>
   <span class="theme-dot" data-color="cyan" title="Cyan"></span>
   <span class="theme-dot" data-color="rosegold" title="Rose Gold"></span>
-  <span class="theme-dot" data-color="mint" title="Mint"></span>
+  <span class="theme-dot" data-color="lime" title="Lime"></span>
   <span class="theme-dot" data-color="indigo" title="Indigo"></span>
   <span class="theme-dot" data-color="amber" title="Amber"></span>
 </div>
@@ -1484,10 +1484,10 @@ addEventListener('resize', resizeCanvas); resizeCanvas();
 function updateParticleColor(t) {
   const map = {
     blue:'rgba(56,189,248,0.4)', red:'rgba(239,68,68,0.4)',
-    pink:'rgba(236,72,153,0.4)', green:'rgba(16,185,129,0.4)',
+    pink:'rgba(236,72,153,0.4)', teal:'rgba(13,148,136,0.4)',
     orange:'rgba(249,115,22,0.4)', purple:'rgba(168,85,247,0.4)',
     yellow:'rgba(234,179,8,0.4)', cyan:'rgba(6,182,212,0.4)',
-    rosegold:'rgba(232,146,124,0.4)', mint:'rgba(52,211,153,0.4)',
+    rosegold:'rgba(232,146,124,0.4)', lime:'rgba(132,204,22,0.4)',
     indigo:'rgba(99,102,241,0.4)', amber:'rgba(245,158,11,0.4)'
   };
   pColor = map[t] || map.blue;
