@@ -6,10 +6,12 @@
 <title>Paste Manager</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Display:wght@400;500;700&display=swap&display=swap">
-<link rel="preload" as="style" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Display:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Display:wght@400;500;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+</noscript>
 
 <style>
 /* ═══════════════════════════════════════
@@ -47,14 +49,17 @@
   --on-bg: #E4EAF2;
   --scrim: rgba(0,0,0,0.72);
 
-  /* Motion */
+  /* Motion — M3 Expressive Enhanced */
   --spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --spring-snappy: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out: cubic-bezier(0.05, 0.7, 0.1, 1.0);
   --ease-in: cubic-bezier(0.3, 0.0, 0.8, 0.15);
   --standard: cubic-bezier(0.2, 0.0, 0, 1.0);
-  --dur-short: 200ms;
-  --dur-med: 350ms;
-  --dur-long: 500ms;
+  --emphasized: cubic-bezier(0.2, 0.0, 0, 1.0);
+  --dur-short: 180ms;
+  --dur-med: 320ms;
+  --dur-long: 480ms;
+  --dur-xlong: 600ms;
 
   /* Shape */
   --r-xs: 4px;
@@ -174,13 +179,36 @@
   --surface-container: #E0E8F0;
   --surface-container-high: #D4DCE8;
   --surface-container-highest: #C8D4E4;
-  --on-surface: #1A2230;
-  --on-surface-variant: #3A4A5A;
-  --outline: #7A8A9A;
-  --outline-variant: #B0BEC8;
-  --on-bg: #1A2230;
+  --on-surface: #0D1520;
+  --on-surface-variant: #2A3A4A;
+  --outline: #5A6A7A;
+  --outline-variant: #8AABB8;
+  --on-bg: #0D1520;
   --scrim: rgba(0,0,0,0.35);
+  --error: #C00010;
+  --error-container: #FFDAD7;
+  --on-error: #FFFFFF;
 }
+/* Day mode: force readable text everywhere */
+[data-mode="day"] body,
+[data-mode="day"] .card-title,
+[data-mode="day"] .m3-input,
+[data-mode="day"] .search-wrap input,
+[data-mode="day"] .meta-item,
+[data-mode="day"] .editor-card h2 { color: var(--on-surface); }
+[data-mode="day"] .m3-input { background: #FFFFFF; border-color: var(--outline-variant); }
+[data-mode="day"] .m3-input::placeholder,
+[data-mode="day"] .search-wrap input::placeholder { color: var(--outline); }
+[data-mode="day"] .card { background: #FFFFFF; border-color: #C0CEDC; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+[data-mode="day"] .search-wrap { background: #FFFFFF; border-color: var(--outline-variant); }
+[data-mode="day"] .tabs-row { background: var(--surface-container-low); border-color: var(--outline-variant); }
+[data-mode="day"] .action-btn { background: var(--surface-container-low); border-color: var(--outline-variant); color: var(--on-surface); }
+[data-mode="day"] .m3-dialog { background: #FFFFFF; }
+[data-mode="day"] .m3-dialog-title { color: var(--on-surface); }
+[data-mode="day"] .m3-dialog-body { color: var(--on-surface-variant); }
+[data-mode="day"] .m3-dialog-btn-cancel { background: var(--surface-container-high); color: var(--on-surface-variant); }
+[data-mode="day"] .hero-card { box-shadow: 0 4px 24px rgba(0,0,0,0.15); }
+[data-mode="day"] .total-badge { background: var(--surface-container-high); color: var(--on-surface-variant); }
 [data-mode="day"][data-theme="blue"] {
   --primary: #0070B8; --on-primary: #FFFFFF;
   --primary-container: #B8DCFF; --on-primary-container: #00213A;
@@ -285,6 +313,11 @@ body {
 body.loaded {
   transition: background var(--dur-long) var(--standard), color var(--dur-med) var(--standard);
 }
+/* GPU acceleration for animated elements */
+.hero-card, .m3-dialog, .fab, .card, .toast {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
 
 /* particles */
 #particles-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
@@ -296,11 +329,15 @@ body.loaded {
 .ripple-surface { position: relative; overflow: hidden; }
 .ripple-wave {
   position: absolute; border-radius: 50%;
-  background: rgba(var(--seed-rgb), 0.22);
-  transform: scale(0); animation: ripple-expand 550ms var(--ease-out) forwards;
+  background: rgba(var(--seed-rgb), 0.20);
+  transform: scale(0); animation: ripple-expand 600ms var(--ease-out) forwards;
   pointer-events: none;
 }
-@keyframes ripple-expand { to { transform: scale(4); opacity: 0; } }
+@keyframes ripple-expand {
+  0%   { transform: scale(0); opacity: 1; }
+  70%  { opacity: 0.5; }
+  100% { transform: scale(4.5); opacity: 0; }
+}
 
 /* ═══════════════════════════════════════
    SQUIGGLE
@@ -349,14 +386,15 @@ body.loaded {
   border: 1px solid var(--outline-variant);
   border-radius: var(--r-2xl);
   padding: 28px 22px 22px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.8),
+  box-shadow: 0 24px 64px rgba(0,0,0,0.85),
               0 0 0 1px rgba(255,255,255,0.05);
-  transform: scale(0.88) translateY(12px);
+  transform: scale(0.82) translateY(20px);
   opacity: 0;
-  transition: transform var(--dur-med) var(--spring),
+  transition: transform var(--dur-long) var(--spring-snappy),
               opacity var(--dur-med) var(--standard);
   position: relative;
   overflow: hidden;
+  will-change: transform, opacity;
 }
 /* Full rounded thin glow border */
 .m3-dialog::before {
@@ -443,38 +481,30 @@ body.loaded {
 .m3-dialog-btn-cancel:hover { background: var(--surface-container-highest); color: var(--on-surface); }
 /* Delete — bold red */
 .m3-dialog-btn-delete {
-  background: color-mix(in srgb, var(--error) 22%, #1a0000);
+  background: color-mix(in srgb, var(--error) 18%, var(--surface-container-high));
   color: var(--error);
-  border: 1.5px solid color-mix(in srgb, var(--error) 55%, transparent);
-  box-shadow: 0 0 12px color-mix(in srgb, var(--error) 15%, transparent);
-  text-shadow: 0 0 8px color-mix(in srgb, var(--error) 40%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--error) 50%, transparent);
 }
 .m3-dialog-btn-delete:hover {
-  background: color-mix(in srgb, var(--error) 32%, #1a0000);
-  box-shadow: 0 0 20px color-mix(in srgb, var(--error) 28%, transparent);
+  background: color-mix(in srgb, var(--error) 28%, var(--surface-container-high));
 }
 /* Discard — bold amber */
 .m3-dialog-btn-discard {
-  background: color-mix(in srgb, #f59e0b 22%, #1a0e00);
-  color: #ffd060;
-  border: 1.5px solid color-mix(in srgb, #f59e0b 55%, transparent);
-  box-shadow: 0 0 12px color-mix(in srgb, #f59e0b 15%, transparent);
-  text-shadow: 0 0 8px color-mix(in srgb, #ffd060 40%, transparent);
+  background: color-mix(in srgb, #f59e0b 18%, var(--surface-container-high));
+  color: #e8a020;
+  border: 1.5px solid color-mix(in srgb, #f59e0b 50%, transparent);
 }
 .m3-dialog-btn-discard:hover {
-  background: color-mix(in srgb, #f59e0b 32%, #1a0e00);
-  box-shadow: 0 0 20px color-mix(in srgb, #f59e0b 28%, transparent);
+  background: color-mix(in srgb, #f59e0b 28%, var(--surface-container-high));
 }
 /* Keep/Primary — bold primary */
 .m3-dialog-btn-keep {
-  background: color-mix(in srgb, var(--primary) 22%, var(--primary-container));
+  background: color-mix(in srgb, var(--primary) 18%, var(--primary-container));
   color: var(--primary);
-  border: 1.5px solid color-mix(in srgb, var(--primary) 55%, transparent);
-  box-shadow: 0 0 12px color-mix(in srgb, var(--primary) 15%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--primary) 50%, transparent);
 }
 .m3-dialog-btn-keep:hover {
-  background: color-mix(in srgb, var(--primary) 30%, var(--primary-container));
-  box-shadow: 0 0 20px color-mix(in srgb, var(--primary) 28%, transparent);
+  background: color-mix(in srgb, var(--primary) 28%, var(--primary-container));
 }
 
 /* TOP APP BAR — hidden/removed */
@@ -552,7 +582,8 @@ body.loaded {
 .hero-card > * { position: relative; z-index: 1; }
 
 @keyframes springUp {
-  from { opacity: 0; transform: translateY(24px) scale(0.96); }
+  from { opacity: 0; transform: translateY(28px) scale(0.94); }
+  60%  { opacity: 1; transform: translateY(-4px) scale(1.01); }
   to   { opacity: 1; transform: none; }
 }
 .hero-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
@@ -789,8 +820,9 @@ body.loaded {
   box-shadow: 0 2px 8px rgba(0,0,0,0.35);
 }
 @keyframes tab-pop {
-  0%   { transform: scale(0.88); }
-  60%  { transform: scale(1.04); }
+  0%   { transform: scale(0.85); }
+  50%  { transform: scale(1.06); }
+  75%  { transform: scale(0.97); }
   100% { transform: scale(1); }
 }
 .tab-btn.active { animation: tab-pop var(--dur-med) var(--spring); }
@@ -838,17 +870,20 @@ body.loaded {
   border-radius: var(--r-2xl);
   padding: 18px 18px 14px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  animation: card-in var(--dur-med) var(--ease-out) both;
-  transition: transform var(--dur-short) var(--standard),
-              box-shadow var(--dur-short) var(--standard);
+  animation: card-in var(--dur-long) var(--spring-snappy) both;
+  transition: transform var(--dur-short) var(--spring),
+              box-shadow var(--dur-short) var(--standard),
+              background var(--dur-short) var(--standard);
+  will-change: transform;
 }
-.card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+.card:hover { transform: translateY(-3px) scale(1.005); box-shadow: 0 8px 24px rgba(0,0,0,0.45); }
 @keyframes card-in {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  60%  { opacity: 1; transform: translateY(-3px) scale(1.01); }
   to   { opacity: 1; transform: none; }
 }
 @keyframes card-out {
-  to { opacity: 0; transform: scale(0.86); }
+  to { opacity: 0; transform: scale(0.82) translateY(8px); }
 }
 .deleting { animation: card-out 380ms var(--spring) forwards !important; pointer-events: none; }
 
@@ -885,11 +920,14 @@ body.loaded {
   font-family: 'Google Sans', sans-serif;
   font-size: 0.8125rem; font-weight: 600;
   cursor: pointer;
-  transition: all var(--dur-short) var(--standard);
+  transition: all var(--dur-short) var(--spring);
   white-space: nowrap;
+  will-change: transform;
 }
-.action-btn .material-icons-round { font-size: 0.9rem; }
-.action-btn:hover { background: var(--surface-container-highest); transform: translateY(-1px); }
+.action-btn .material-icons-round { font-size: 0.9rem; transition: transform var(--dur-short) var(--spring); }
+.action-btn:hover { background: var(--surface-container-highest); transform: translateY(-2px) scale(1.03); }
+.action-btn:active { transform: scale(0.93); }
+.action-btn:hover .material-icons-round { transform: scale(1.2); }
 
 .btn-visit  { border-color: color-mix(in srgb, var(--primary) 40%, transparent); color: var(--primary); }
 .btn-visit:hover  { background: color-mix(in srgb, var(--primary) 12%, var(--surface-container-high)); }
@@ -1042,8 +1080,9 @@ body.loaded {
   animation-delay: 300ms;
 }
 @keyframes fabBounceIn {
-  0%   { opacity: 0; transform: scale(0) rotate(-45deg); }
-  70%  { transform: scale(1.12) rotate(5deg); }
+  0%   { opacity: 0; transform: scale(0) rotate(-90deg) translateY(16px); }
+  60%  { transform: scale(1.18) rotate(8deg); }
+  80%  { transform: scale(0.95) rotate(-3deg); }
   100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 .fab:hover { transform: scale(1.1) translateY(-2px); box-shadow: 0 10px 32px rgba(0,0,0,0.6); }
@@ -1102,24 +1141,8 @@ body.loaded {
 }
 .error-shake { animation: shake 0.42s ease-in-out; box-shadow: 0 0 0 3px rgba(255,180,171,0.25) !important; }
 
-/* ═══════════════════════════════════════
-   PULL TO REFRESH
-═══════════════════════════════════════ */
-#ptr-indicator {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  height: 0; overflow: hidden;
-  color: var(--primary);
-  font-size: 0.875rem; font-weight: 500;
-  transition: height 200ms var(--ease-out);
-}
-#ptr-indicator.pulling { height: 48px; }
-#ptr-indicator.refreshing { height: 48px; }
-#ptr-indicator .ptr-icon {
-  font-size: 1.2rem;
-  transition: transform 300ms var(--ease-out);
-}
-#ptr-indicator.pulling .ptr-icon { transform: rotate(180deg); }
-#ptr-indicator.refreshing .ptr-icon { animation: spin 700ms linear infinite; }
+
+
 
 .hidden { display: none !important; }
 @media (max-width: 520px) {
@@ -1136,10 +1159,6 @@ body.loaded {
 <div id="splashCover"></div>
 
 
-<div id="ptr-indicator">
-  <span class="material-icons-round ptr-icon">refresh</span>
-  <span id="ptr-text">Pull to refresh</span>
-</div>
 
 <div class="container">
 
@@ -1617,10 +1636,10 @@ function renderCards(data) {
   cardsGrid.innerHTML = '';
   const keys = Object.keys(data);
   totalCount.textContent = `Total: ${keys.length}`;
-  // Sort by date ascending for serial numbering (oldest = 01)
-  const sortedAsc = [...keys].sort((a, b) => new Date(data[a].updatedAt) - new Date(data[b].updatedAt));
+  // Serial = stable alphabetical rank (A=1, B=2...) — never changes on delete
+  const sortedAlpha = [...keys].sort((a, b) => a.localeCompare(b));
   const serialMap = {};
-  sortedAsc.forEach((k, i) => { serialMap[k] = String(i + 1).padStart(2, '0'); });
+  sortedAlpha.forEach((k, i) => { serialMap[k] = String(i + 1).padStart(2, '0'); });
   // Display newest first
   keys.sort((a, b) => new Date(data[b].updatedAt) - new Date(data[a].updatedAt));
 
@@ -1644,7 +1663,7 @@ function renderCards(data) {
 
     const card = document.createElement('div');
     card.className = 'card ripple-surface';
-    card.style.animationDelay = `${idx * 45}ms`;
+    card.style.animationDelay = `${Math.min(idx * 55, 400)}ms`;
     card.innerHTML = `
       <div class="card-title">
         <span class="card-serial">${serial}</span>
@@ -1935,50 +1954,8 @@ window.addEventListener('popstate', e => {
   // If on My Paste's tab, allow exit naturally
 });
 
-/* ════════════════════════════════
-   PULL TO REFRESH
-════════════════════════════════ */
-(function() {
-  const ptrEl   = document.getElementById('ptr-indicator');
-  const ptrText = document.getElementById('ptr-text');
-  let startY = 0, pulling = false, triggered = false;
-  const THRESHOLD = 72;
 
-  document.addEventListener('touchstart', e => {
-    if (window.scrollY === 0) { startY = e.touches[0].clientY; pulling = true; triggered = false; }
-  }, { passive: true });
 
-  document.addEventListener('touchmove', e => {
-    if (!pulling) return;
-    const dy = e.touches[0].clientY - startY;
-    if (dy > 0 && window.scrollY === 0) {
-      const progress = Math.min(dy / THRESHOLD, 1);
-      if (progress > 0.1) {
-        ptrEl.classList.add('pulling');
-        ptrText.textContent = dy >= THRESHOLD ? 'Release to refresh' : 'Pull to refresh';
-      }
-      if (dy >= THRESHOLD && !triggered) triggered = true;
-    }
-  }, { passive: true });
-
-  document.addEventListener('touchend', () => {
-    if (!pulling) return;
-    pulling = false;
-    if (triggered) {
-      ptrEl.classList.remove('pulling');
-      ptrEl.classList.add('refreshing');
-      ptrText.textContent = 'Refreshing...';
-      setTimeout(() => {
-        window.refreshApps();
-        ptrEl.classList.remove('refreshing');
-        ptrText.textContent = 'Pull to refresh';
-      }, 900);
-    } else {
-      ptrEl.classList.remove('pulling');
-    }
-    triggered = false;
-  });
-})();
 </script>
 </body>
 </html>
