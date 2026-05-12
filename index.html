@@ -616,6 +616,238 @@ body.loaded {
   background: color-mix(in srgb, var(--primary) 28%, var(--primary-container));
 }
 
+
+/* ═══════════════════════════════════════
+   VIEW PASTE DIALOG — M3 Expressive
+═══════════════════════════════════════ */
+#viewPasteDialog {
+  z-index: 8500; /* above regular dialogs */
+}
+
+.view-dialog {
+  max-width: 560px;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 80px);
+}
+
+/* Animated primary border */
+.view-dialog::before {
+  background: conic-gradient(
+    from var(--view-angle, 0deg),
+    color-mix(in srgb, var(--primary) 90%, transparent),
+    color-mix(in srgb, var(--primary) 20%, transparent) 35%,
+    color-mix(in srgb, var(--primary) 75%, transparent) 65%,
+    color-mix(in srgb, var(--primary) 90%, transparent)
+  );
+  animation: viewBorderSpin 6s linear infinite;
+}
+@property --view-angle {
+  syntax: '<angle>'; initial-value: 0deg; inherits: false;
+}
+@keyframes viewBorderSpin { to { --view-angle: 360deg; } }
+
+/* Dialog header */
+.view-dialog-header {
+  padding: 20px 20px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  border-bottom: 1px solid var(--outline-variant);
+  flex-shrink: 0;
+  position: relative;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--primary-container) 60%, var(--surface-container-highest)),
+    var(--surface-container-highest)
+  );
+}
+.view-dialog-icon {
+  width: 44px; height: 44px;
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--primary) 18%, var(--primary-container));
+  border: 1.5px solid color-mix(in srgb, var(--primary) 45%, transparent);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--primary) 20%, transparent);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.view-dialog-icon .material-icons-round { color: var(--primary); font-size: 1.3rem; }
+
+.view-dialog-meta { flex: 1; min-width: 0; }
+.view-dialog-name {
+  font-family: 'Google Sans Display', sans-serif;
+  font-size: 1.05rem; font-weight: 700;
+  color: var(--on-surface);
+  word-break: break-all;
+  line-height: 1.3;
+  margin-bottom: 5px;
+}
+.view-dialog-tags {
+  display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+}
+.view-dialog-tag {
+  font-size: 0.7rem; font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+  letter-spacing: 0.03em;
+}
+.view-dialog-tag.type-json {
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
+  color: var(--primary);
+  border: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
+}
+.view-dialog-tag.type-text {
+  background: color-mix(in srgb, #D4B8E0 15%, transparent);
+  color: #D4B8E0;
+  border: 1px solid color-mix(in srgb, #D4B8E0 35%, transparent);
+}
+.view-dialog-tag.chars-tag {
+  background: color-mix(in srgb, var(--secondary) 15%, transparent);
+  color: var(--on-surface-variant);
+  border: 1px solid color-mix(in srgb, var(--outline-variant) 60%, transparent);
+}
+
+/* Close button */
+.view-dialog-close {
+  width: 36px; height: 36px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--outline-variant);
+  background: var(--surface-container-high);
+  color: var(--on-surface-variant);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--dur-short) var(--spring);
+  -webkit-tap-highlight-color: transparent;
+}
+.view-dialog-close:hover { background: color-mix(in srgb, var(--error) 15%, var(--surface-container-highest)); color: var(--error); border-color: color-mix(in srgb, var(--error) 40%, transparent); transform: rotate(90deg) scale(1.05); }
+.view-dialog-close:active { transform: rotate(90deg) scale(0.92); }
+.view-dialog-close .material-icons-round { font-size: 1.1rem; }
+
+/* Loading state */
+.view-dialog-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 48px 24px;
+  color: var(--on-surface-variant);
+  font-size: 0.875rem;
+}
+.view-loader {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 3px solid var(--outline-variant);
+  border-top-color: var(--primary);
+  animation: viewSpin 700ms linear infinite;
+}
+@keyframes viewSpin { to { transform: rotate(360deg); } }
+
+/* Content scroll area */
+.view-dialog-content {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 0;
+  position: relative;
+}
+/* Custom scrollbar */
+.view-dialog-content::-webkit-scrollbar { width: 6px; }
+.view-dialog-content::-webkit-scrollbar-track { background: transparent; }
+.view-dialog-content::-webkit-scrollbar-thumb {
+  background: var(--outline-variant);
+  border-radius: 3px;
+}
+.view-dialog-content::-webkit-scrollbar-thumb:hover { background: var(--outline); }
+
+/* Scroll fade hints */
+.view-scroll-fade-top,
+.view-scroll-fade-bottom {
+  position: sticky;
+  left: 0; right: 0;
+  height: 28px;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 200ms ease;
+}
+.view-scroll-fade-top {
+  top: 0;
+  background: linear-gradient(to bottom, var(--surface-container-highest), transparent);
+}
+.view-scroll-fade-bottom {
+  bottom: 0;
+  background: linear-gradient(to top, var(--surface-container-highest), transparent);
+}
+.view-scroll-fade-top.hidden-fade,
+.view-scroll-fade-bottom.hidden-fade { opacity: 0; }
+
+/* The actual pre/text block */
+.view-dialog-pre {
+  margin: 0;
+  padding: 18px 20px 18px;
+  font-family: 'Google Sans', monospace;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--on-surface);
+  white-space: pre-wrap;
+  word-break: break-all;
+  -webkit-user-select: text;
+  user-select: text;
+  touch-action: auto;
+}
+
+/* JSON syntax highlighting */
+.view-dialog-pre .j-key    { color: var(--primary); }
+.view-dialog-pre .j-str    { color: #6CDBAE; }
+.view-dialog-pre .j-num    { color: #FFB77A; }
+.view-dialog-pre .j-bool   { color: #D4B8E0; }
+.view-dialog-pre .j-null   { color: var(--on-surface-variant); }
+
+/* Footer actions */
+.view-dialog-footer {
+  padding: 14px 20px 16px;
+  border-top: 1px solid var(--outline-variant);
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  background: var(--surface-container-highest);
+}
+.view-dialog-footer .m3-dialog-btn {
+  font-size: 0.8125rem;
+  padding: 10px 14px;
+}
+.view-dialog-btn-open {
+  background: color-mix(in srgb, var(--primary) 16%, var(--primary-container));
+  color: var(--primary);
+  border: 1.5px solid color-mix(in srgb, var(--primary) 50%, transparent);
+}
+.view-dialog-btn-open:hover {
+  background: color-mix(in srgb, var(--primary) 28%, var(--primary-container));
+}
+.view-dialog-btn-copy2 {
+  background: color-mix(in srgb, #6CDBAE 14%, var(--surface-container-high));
+  color: #6CDBAE;
+  border: 1.5px solid color-mix(in srgb, #6CDBAE 40%, transparent);
+}
+.view-dialog-btn-copy2:hover {
+  background: color-mix(in srgb, #6CDBAE 24%, var(--surface-container-high));
+}
+
+/* Day mode overrides */
+[data-mode="day"] .view-dialog-header {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--primary-container) 50%, #fff),
+    #fff
+  );
+}
+[data-mode="day"] .view-dialog-footer { background: #fff; }
+[data-mode="day"] .view-dialog-pre { color: var(--on-surface); }
+[data-mode="day"] .view-scroll-fade-top { background: linear-gradient(to bottom, #fff, transparent); }
+[data-mode="day"] .view-scroll-fade-bottom { background: linear-gradient(to top, #fff, transparent); }
+
 /* TOP APP BAR — hidden/removed */
 .top-bar { display: none !important; }
 
@@ -1594,6 +1826,52 @@ body.loaded {
   </div>
 </div>
 
+<!-- VIEW PASTE DIALOG (Material Expressive 3) -->
+<div class="m3-dialog-scrim" id="viewPasteDialog">
+  <div class="m3-dialog view-dialog ripple-surface" id="viewPasteDialogInner">
+
+    <!-- Header -->
+    <div class="view-dialog-header">
+      <div class="view-dialog-icon">
+        <span class="material-icons-round">content_paste</span>
+      </div>
+      <div class="view-dialog-meta">
+        <div class="view-dialog-name" id="viewDialogName">Paste Name</div>
+        <div class="view-dialog-tags">
+          <span class="view-dialog-tag type-json" id="viewDialogTypeTag">JSON</span>
+          <span class="view-dialog-tag chars-tag" id="viewDialogCharsTag">0 chars</span>
+        </div>
+      </div>
+      <button class="view-dialog-close ripple-surface" id="viewDialogCloseBtn">
+        <span class="material-icons-round">close</span>
+      </button>
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="view-dialog-content" id="viewDialogContent">
+      <div class="view-scroll-fade-top hidden-fade" id="viewScrollTop"></div>
+      <!-- Loading / actual content injected here by JS -->
+      <div class="view-dialog-loading" id="viewDialogLoading">
+        <div class="view-loader"></div>
+        <span>Fetching data...</span>
+      </div>
+      <pre class="view-dialog-pre hidden" id="viewDialogPre"></pre>
+      <div class="view-scroll-fade-bottom hidden-fade" id="viewScrollBottom"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="view-dialog-footer">
+      <button class="m3-dialog-btn view-dialog-btn-copy2 ripple-surface" id="viewDialogCopyBtn">
+        <span class="material-icons-round">content_copy</span> Copy URL
+      </button>
+      <button class="m3-dialog-btn view-dialog-btn-open ripple-surface" id="viewDialogOpenBtn">
+        <span class="material-icons-round">open_in_new</span> Open Raw
+      </button>
+    </div>
+
+  </div>
+</div>
+
 <!-- FAB -->
 <button class="fab squiggle ripple-surface hidden" id="btnAddNew">
   <span class="material-icons-round">add</span>
@@ -2010,8 +2288,8 @@ function renderCards(data) {
         <span class="material-icons-round">content_paste</span>${escHtml(key)}
       </div>
       <div class="card-actions">
-        <button class="action-btn btn-visit squiggle ripple-surface" data-url="${rawUrl}">
-          <span class="material-icons-round">open_in_new</span> Visit
+        <button class="action-btn btn-visit squiggle ripple-surface" data-url="${rawUrl}" data-id="${escHtml(key)}">
+          <span class="material-icons-round">preview</span> Visit
         </button>
         <button class="action-btn btn-edit squiggle ripple-surface" data-id="${escHtml(key)}">
           <span class="material-icons-round">edit</span> Edit
@@ -2049,10 +2327,158 @@ searchInput.addEventListener('input', e => {
 /* ════════════════════════════════
    CARD LISTENERS
 ════════════════════════════════ */
+/* ════════════════════════════════
+   VIEW PASTE DIALOG — logic
+════════════════════════════════ */
+const viewPasteDialog    = document.getElementById('viewPasteDialog');
+const viewDialogName     = document.getElementById('viewDialogName');
+const viewDialogTypeTag  = document.getElementById('viewDialogTypeTag');
+const viewDialogCharsTag = document.getElementById('viewDialogCharsTag');
+const viewDialogContent  = document.getElementById('viewDialogContent');
+const viewDialogLoading  = document.getElementById('viewDialogLoading');
+const viewDialogPre      = document.getElementById('viewDialogPre');
+const viewDialogCloseBtn = document.getElementById('viewDialogCloseBtn');
+const viewDialogCopyBtn  = document.getElementById('viewDialogCopyBtn');
+const viewDialogOpenBtn  = document.getElementById('viewDialogOpenBtn');
+const viewScrollTop      = document.getElementById('viewScrollTop');
+const viewScrollBottom   = document.getElementById('viewScrollBottom');
+
+let viewCurrentUrl = '';
+
+function syntaxHighlightJson(json) {
+  // Escape HTML first
+  json = json.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return json.replace(
+    /("(\u[a-zA-Z0-9]{4}|\[^u]|[^\"])*"(\s*:)?|(true|false|null)|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+    match => {
+      if (/^"/.test(match)) {
+        if (/:$/.test(match)) return `<span class="j-key">${match}</span>`;
+        return `<span class="j-str">${match}</span>`;
+      }
+      if (/true|false/.test(match)) return `<span class="j-bool">${match}</span>`;
+      if (/null/.test(match))       return `<span class="j-null">${match}</span>`;
+      return `<span class="j-num">${match}</span>`;
+    }
+  );
+}
+
+function updateScrollFades() {
+  const el = viewDialogContent;
+  const atTop    = el.scrollTop < 8;
+  const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 8;
+  viewScrollTop.classList.toggle('hidden-fade', atTop);
+  viewScrollBottom.classList.toggle('hidden-fade', atBottom);
+}
+
+viewDialogContent.addEventListener('scroll', updateScrollFades, { passive: true });
+
+function showViewDialog(id, url, charCount) {
+  viewCurrentUrl = url;
+  viewDialogName.textContent = id;
+  viewDialogCharsTag.textContent = charCount ? `${charCount} chars` : '';
+
+  // Reset state
+  viewDialogLoading.classList.remove('hidden');
+  viewDialogPre.classList.add('hidden');
+  viewDialogPre.innerHTML = '';
+  viewDialogTypeTag.textContent = '...';
+  viewDialogTypeTag.className = 'view-dialog-tag chars-tag';
+  viewScrollTop.classList.add('hidden-fade');
+  viewScrollBottom.classList.add('hidden-fade');
+  viewDialogContent.scrollTop = 0;
+
+  // Open dialog
+  viewPasteDialog.classList.add('open');
+  attachAllRipples();
+
+  // Fetch from Firebase directly (faster than public JSON URL)
+  get(ref(db, `api_data/${currentUserUid}/${id}`)).then(snap => {
+    let raw, isJson = false;
+    if (snap.exists()) {
+      const val = snap.val();
+      if (typeof val === 'object' && val !== null) {
+        raw = JSON.stringify(val, null, 2);
+        isJson = true;
+      } else {
+        raw = String(val);
+        // Detect if it looks like JSON
+        try { JSON.parse(raw); isJson = true; } catch(_) {}
+      }
+    } else {
+      raw = '(empty)';
+    }
+
+    // Update type tag
+    viewDialogTypeTag.textContent = isJson ? 'JSON' : 'TEXT';
+    viewDialogTypeTag.className = `view-dialog-tag ${isJson ? 'type-json' : 'type-text'}`;
+    viewDialogCharsTag.textContent = `${raw.length} chars`;
+
+    // Render content
+    viewDialogLoading.classList.add('hidden');
+    viewDialogPre.classList.remove('hidden');
+    if (isJson) {
+      viewDialogPre.innerHTML = syntaxHighlightJson(raw);
+    } else {
+      viewDialogPre.textContent = raw;
+    }
+
+    // Update scroll fades after content loads
+    requestAnimationFrame(() => {
+      updateScrollFades();
+    });
+  }).catch(err => {
+    viewDialogLoading.classList.add('hidden');
+    viewDialogPre.classList.remove('hidden');
+    viewDialogPre.textContent = 'Error loading data: ' + err.message;
+  });
+}
+
+function hideViewDialog() {
+  viewPasteDialog.classList.remove('open');
+}
+
+viewDialogCloseBtn.addEventListener('click', hideViewDialog);
+viewPasteDialog.addEventListener('click', e => {
+  if (e.target === viewPasteDialog) hideViewDialog();
+});
+
+// Copy URL button
+viewDialogCopyBtn.addEventListener('click', () => {
+  navigator.clipboard.writeText(viewCurrentUrl);
+  const orig = viewDialogCopyBtn.innerHTML;
+  viewDialogCopyBtn.innerHTML = '<span class="material-icons-round">done</span> Copied!';
+  setTimeout(() => { viewDialogCopyBtn.innerHTML = orig; }, 2000);
+  showToast('Raw URL Copied!', 'success');
+});
+
+// Open Raw button
+viewDialogOpenBtn.addEventListener('click', () => {
+  window.open(viewCurrentUrl, '_blank');
+});
+
+// Back button support
+window.addEventListener('popstate', e => {
+  if (viewPasteDialog.classList.contains('open')) {
+    hideViewDialog();
+    history.pushState({ tab: currentTab }, '');
+    return;
+  }
+  // (existing handlers below)
+}, true); // capture phase — runs before existing listener
+
 function attachCardListeners() {
-  /* Visit */
+  /* Visit — opens preview popup */
   document.querySelectorAll('.btn-visit').forEach(btn => {
-    btn.addEventListener('click', e => window.open(e.currentTarget.dataset.url, '_blank'));
+    btn.addEventListener('click', e => {
+      const b = e.currentTarget;
+      const id  = b.dataset.id;
+      const url = b.dataset.url;
+      // Get chars from card meta if available
+      const card  = b.closest('.card');
+      const charsMeta = card ? card.querySelector('.meta-item .material-icons-round[aria-hidden]') : null;
+      const chars = currentApps[id]?.chars || 0;
+      showViewDialog(id, url, chars);
+    });
   });
 
   /* Copy */
@@ -2281,6 +2707,11 @@ history.pushState({ tab: 'list' }, '');
 
 window.addEventListener('popstate', e => {
   // If any dialog is open, close it
+  if (viewPasteDialog.classList.contains('open')) {
+    hideViewDialog();
+    history.pushState({ tab: currentTab }, '');
+    return;
+  }
   if (deleteDialog.classList.contains('open')) {
     hideDeleteDialog();
     history.pushState({ tab: currentTab }, '');
