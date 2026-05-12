@@ -6,12 +6,9 @@
 <title>Paste Manager</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Display:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript>
+<!-- Load fonts eagerly (no print trick) for faster first paint -->
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Display:wght@400;500;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-</noscript>
 
 <style>
 /* ═══════════════════════════════════════
@@ -421,6 +418,10 @@ body {
 body.loaded {
   transition: background var(--dur-long) var(--standard), color var(--dur-med) var(--standard);
 }
+/* App section perf: contain layout/style until visible */
+#appSection {
+  contain: layout style;
+}
 /* GPU acceleration for animated elements */
 .hero-card, .m3-dialog, .fab, .card, .toast {
   transform: translateZ(0);
@@ -466,7 +467,7 @@ body.loaded {
 #splashCover {
   position: fixed; inset: 0; z-index: 9000;
   background: var(--bg);
-  transition: opacity 250ms var(--ease-in);
+  transition: opacity 180ms ease-in;
 }
 #splashCover.fade-out { opacity: 0; pointer-events: none; }
 #splashCover.gone { display: none; }
@@ -1146,25 +1147,171 @@ body.loaded {
 .btn-filled .material-icons-round { font-size: 1.1rem; }
 
 /* ═══════════════════════════════════════
-   LOGIN CARD
+   LOGIN WRAPPER — true viewport center
+═══════════════════════════════════════ */
+#loginWrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px;
+  z-index: 100;
+  pointer-events: none; /* passthrough when hidden */
+}
+#loginWrapper.active { pointer-events: auto; }
+
+/* ═══════════════════════════════════════
+   LOGIN CARD — M3 Expressive
 ═══════════════════════════════════════ */
 #loginSection {
-  max-width: 400px; margin: 14vh auto 0;
-  padding: 36px 28px 28px;
+  width: 100%; max-width: 400px;
+  padding: 40px 28px 32px;
   background: var(--surface-container);
   border: 1px solid var(--outline-variant);
   border-radius: var(--r-2xl);
-  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.65),
+              0 0 0 1px rgba(255,255,255,0.04);
   text-align: center;
-  animation: springUp var(--dur-long) var(--spring) both;
+  position: relative;
+  overflow: hidden;
+  /* M3 Expressive entrance */
+  animation: loginCardIn 600ms var(--spring-snappy) both;
+  will-change: transform, opacity;
 }
+
+/* Animated gradient border ring */
+#loginSection::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-2xl);
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--login-angle, 0deg),
+    color-mix(in srgb, var(--primary) 90%, transparent),
+    color-mix(in srgb, var(--primary) 20%, transparent) 30%,
+    color-mix(in srgb, var(--primary) 70%, transparent) 60%,
+    color-mix(in srgb, var(--primary) 90%, transparent)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: loginBorderSpin 8s linear infinite;
+  pointer-events: none;
+}
+@property --login-angle {
+  syntax: '<angle>'; initial-value: 0deg; inherits: false;
+}
+@keyframes loginBorderSpin { to { --login-angle: 360deg; } }
+
+/* Soft glow blob behind card */
+#loginSection::after {
+  content: '';
+  position: absolute;
+  inset: -60px;
+  background: radial-gradient(ellipse at 50% 50%,
+    color-mix(in srgb, var(--primary) 12%, transparent),
+    transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes loginCardIn {
+  0%   { opacity: 0; transform: translateY(40px) scale(0.88); }
+  55%  { opacity: 1; transform: translateY(-6px) scale(1.02); }
+  75%  { transform: translateY(2px) scale(0.99); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Login icon badge */
+.login-icon-badge {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-container), var(--tertiary-container, #4A3456));
+  border: 2px solid color-mix(in srgb, var(--primary) 50%, transparent);
+  box-shadow: 0 0 28px color-mix(in srgb, var(--primary) 25%, transparent);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  animation: badgePopIn 500ms var(--spring-snappy) both;
+  animation-delay: 120ms;
+}
+.login-icon-badge .material-icons-round {
+  font-size: 1.75rem;
+  color: var(--primary);
+}
+@keyframes badgePopIn {
+  from { opacity: 0; transform: scale(0.4) rotate(-20deg); }
+  70%  { transform: scale(1.12) rotate(4deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
 #loginSection h2 {
   font-family: 'Google Sans Display', sans-serif;
   font-size: 1.75rem; font-weight: 700;
   color: var(--on-surface);
-  margin-bottom: 28px;
+  margin-bottom: 6px;
+  animation: slideUpFade 400ms var(--ease-out) both;
+  animation-delay: 180ms;
 }
-.login-fields { display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px; }
+.login-subtitle {
+  font-size: 0.875rem;
+  color: var(--on-surface-variant);
+  margin-bottom: 28px;
+  animation: slideUpFade 400ms var(--ease-out) both;
+  animation-delay: 230ms;
+}
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.login-fields { display: flex; flex-direction: column; gap: 14px; margin-bottom: 8px; }
+
+/* Password wrapper with eye toggle */
+.password-field-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.password-field-wrap .m3-input {
+  padding-right: 52px; /* room for eye icon */
+}
+.pw-eye-btn {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--on-surface-variant);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: var(--r-sm);
+  transition: color var(--dur-short) var(--standard),
+              transform var(--dur-short) var(--spring);
+  -webkit-tap-highlight-color: transparent;
+}
+.pw-eye-btn:hover { color: var(--primary); transform: translateY(-50%) scale(1.15); }
+.pw-eye-btn:active { transform: translateY(-50%) scale(0.9); }
+.pw-eye-btn .material-icons-round { font-size: 1.25rem; }
+
+/* Field entrance stagger */
+.login-fields .m3-input,
+.login-fields .password-field-wrap {
+  animation: slideUpFade 380ms var(--ease-out) both;
+}
+.login-fields > *:nth-child(1) { animation-delay: 260ms; }
+.login-fields > *:nth-child(2) { animation-delay: 320ms; }
+
+/* Login button stagger */
+#loginBtn {
+  animation: slideUpFade 380ms var(--ease-out) both;
+  animation-delay: 380ms;
+}
 
 /* ═══════════════════════════════════════
    FAB
@@ -1271,16 +1418,27 @@ body.loaded {
 <div class="container">
 
   <!-- ══ LOGIN ══ -->
-  <div id="loginSection" class="ripple-surface">
-    <h2>Admin Access</h2>
-    <div class="login-fields">
-      <input class="m3-input" type="email" id="email" placeholder="Email" autocomplete="email">
-      <input class="m3-input" type="password" id="password" placeholder="Password" autocomplete="current-password">
+  <div id="loginWrapper" class="active">
+    <div id="loginSection" class="ripple-surface">
+      <div class="login-icon-badge">
+        <span class="material-icons-round">admin_panel_settings</span>
+      </div>
+      <h2>Admin Access</h2>
+      <p class="login-subtitle">Sign in to manage your pastes</p>
+      <div class="login-fields">
+        <input class="m3-input" type="email" id="email" placeholder="Email" autocomplete="email">
+        <div class="password-field-wrap">
+          <input class="m3-input" type="password" id="password" placeholder="Password" autocomplete="current-password" style="width:100%">
+          <button class="pw-eye-btn" id="pwEyeBtn" type="button" tabindex="-1" title="Show/Hide password">
+            <span class="material-icons-round" id="pwEyeIcon">visibility</span>
+          </button>
+        </div>
+      </div>
+      <button class="btn-filled squiggle ripple-surface" id="loginBtn">
+        <span class="material-icons-round">lock</span> Secure Login
+      </button>
+      <p id="loginErr" style="margin-top:12px;font-size:0.8rem;color:var(--error);min-height:18px;"></p>
     </div>
-    <button class="btn-filled squiggle ripple-surface" id="loginBtn">
-      <span class="material-icons-round">lock</span> Secure Login
-    </button>
-    <p id="loginErr" style="margin-top:12px;font-size:0.8rem;color:var(--error);min-height:18px;"></p>
   </div>
 
   <!-- ══ APP SECTION ══ -->
@@ -1698,8 +1856,10 @@ onAuthStateChanged(auth, user => {
   const splash = document.getElementById('splashCover');
   const removeSplash = () => {
     splash.classList.add('fade-out');
-    setTimeout(() => splash.classList.add('gone'), 280);
+    setTimeout(() => splash.classList.add('gone'), 200);
   };
+
+  const loginWrapper = document.getElementById('loginWrapper');
 
   if (user) {
     currentUserUid = user.uid;
@@ -1707,9 +1867,24 @@ onAuthStateChanged(auth, user => {
     if (name.toLowerCase() === 'anik555') name = 'ANiK555';
     userEmailBadge.textContent = name;
 
-    loginSection.classList.add('hidden');
+    // Animate login out, app in
+    loginWrapper.classList.remove('active');
+    loginWrapper.style.opacity = '0';
+    loginWrapper.style.transform = 'scale(0.9)';
+    loginWrapper.style.transition = 'opacity 280ms ease-in, transform 280ms ease-in';
+    setTimeout(() => { loginWrapper.style.display = 'none'; }, 300);
+
     appSection.classList.remove('hidden');
-    // FAB visible in list tab by default
+    appSection.style.opacity = '0';
+    appSection.style.transform = 'translateY(18px)';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        appSection.style.transition = 'opacity 350ms cubic-bezier(0.05,0.7,0.1,1), transform 400ms cubic-bezier(0.34,1.56,0.64,1)';
+        appSection.style.opacity = '1';
+        appSection.style.transform = 'none';
+      });
+    });
+
     btnAddNew.classList.remove('hidden');
     btnAddNew.classList.remove('fab-hidden');
     loadMetadata();
@@ -1717,7 +1892,14 @@ onAuthStateChanged(auth, user => {
   } else {
     currentUserUid = null;
     appSection.classList.add('hidden');
-    loginSection.classList.remove('hidden');
+    appSection.style.opacity = '';
+    appSection.style.transform = '';
+    appSection.style.transition = '';
+    loginWrapper.style.display = '';
+    loginWrapper.style.opacity = '';
+    loginWrapper.style.transform = '';
+    loginWrapper.style.transition = '';
+    loginWrapper.classList.add('active');
     btnAddNew.classList.add('hidden');
     removeSplash();
   }
@@ -1944,6 +2126,19 @@ document.getElementById('loginBtn').addEventListener('click', () => {
     showToast(err.message.replace('Firebase: ', ''), 'error');
   });
 });
+/* ════════════════════════════════
+   PASSWORD EYE TOGGLE
+════════════════════════════════ */
+const pwEyeBtn  = document.getElementById('pwEyeBtn');
+const pwEyeIcon = document.getElementById('pwEyeIcon');
+const pwInput   = document.getElementById('password');
+pwEyeBtn.addEventListener('click', () => {
+  const isHidden = pwInput.type === 'password';
+  pwInput.type = isHidden ? 'text' : 'password';
+  pwEyeIcon.textContent = isHidden ? 'visibility_off' : 'visibility';
+  pwInput.focus();
+});
+
 document.getElementById('password').addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('loginBtn').click();
 });
