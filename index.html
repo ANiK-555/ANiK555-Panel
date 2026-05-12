@@ -1152,14 +1152,18 @@ body.loaded {
 #loginWrapper {
   position: fixed;
   inset: 0;
-  display: flex;
+  display: none; /* hidden until auth resolves — splash covers everything */
   align-items: center;
   justify-content: center;
   padding: 24px 20px;
   z-index: 100;
-  pointer-events: none; /* passthrough when hidden */
+  pointer-events: none;
 }
-#loginWrapper.active { pointer-events: auto; }
+#loginWrapper.active {
+  display: flex;
+  pointer-events: auto;
+  will-change: transform;
+}
 
 /* ═══════════════════════════════════════
    LOGIN CARD — M3 Expressive
@@ -1175,8 +1179,7 @@ body.loaded {
   text-align: center;
   position: relative;
   overflow: hidden;
-  /* M3 Expressive entrance */
-  animation: loginCardIn 600ms var(--spring-snappy) both;
+  /* M3 Expressive entrance — triggered by JS class, not page load */
   will-change: transform, opacity;
 }
 
@@ -1233,8 +1236,6 @@ body.loaded {
   box-shadow: 0 0 28px color-mix(in srgb, var(--primary) 25%, transparent);
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto 20px;
-  animation: badgePopIn 500ms var(--spring-snappy) both;
-  animation-delay: 120ms;
 }
 .login-icon-badge .material-icons-round {
   font-size: 1.75rem;
@@ -1251,15 +1252,11 @@ body.loaded {
   font-size: 1.75rem; font-weight: 700;
   color: var(--on-surface);
   margin-bottom: 6px;
-  animation: slideUpFade 400ms var(--ease-out) both;
-  animation-delay: 180ms;
 }
 .login-subtitle {
   font-size: 0.875rem;
   color: var(--on-surface-variant);
   margin-bottom: 28px;
-  animation: slideUpFade 400ms var(--ease-out) both;
-  animation-delay: 230ms;
 }
 @keyframes slideUpFade {
   from { opacity: 0; transform: translateY(10px); }
@@ -1299,18 +1296,33 @@ body.loaded {
 .pw-eye-btn:active { transform: translateY(-50%) scale(0.9); }
 .pw-eye-btn .material-icons-round { font-size: 1.25rem; }
 
-/* Field entrance stagger */
-.login-fields .m3-input,
-.login-fields .password-field-wrap {
-  animation: slideUpFade 380ms var(--ease-out) both;
+/* Field entrance stagger — applied via JS .login-animating class only */
+.login-animating #loginSection {
+  animation: loginCardIn 550ms var(--spring-snappy) both;
 }
-.login-fields > *:nth-child(1) { animation-delay: 260ms; }
-.login-fields > *:nth-child(2) { animation-delay: 320ms; }
-
-/* Login button stagger */
-#loginBtn {
+.login-animating .login-icon-badge {
+  animation: badgePopIn 480ms var(--spring-snappy) both;
+  animation-delay: 80ms;
+}
+.login-animating #loginSection h2 {
   animation: slideUpFade 380ms var(--ease-out) both;
-  animation-delay: 380ms;
+  animation-delay: 140ms;
+}
+.login-animating .login-subtitle {
+  animation: slideUpFade 380ms var(--ease-out) both;
+  animation-delay: 190ms;
+}
+.login-animating .login-fields > *:nth-child(1) {
+  animation: slideUpFade 360ms var(--ease-out) both;
+  animation-delay: 220ms;
+}
+.login-animating .login-fields > *:nth-child(2) {
+  animation: slideUpFade 360ms var(--ease-out) both;
+  animation-delay: 280ms;
+}
+.login-animating #loginBtn {
+  animation: slideUpFade 360ms var(--ease-out) both;
+  animation-delay: 340ms;
 }
 
 /* ═══════════════════════════════════════
@@ -1405,20 +1417,33 @@ body.loaded {
   .tab-btn { font-size: 0.875rem; padding: 10px 10px; }
 }
 </style>
+<script>
+// Apply saved theme/mode BEFORE first paint — prevents flash
+(function(){
+  var t=localStorage.getItem('appTheme')||'blue';
+  var m=localStorage.getItem('appMode')||'night';
+  document.documentElement.setAttribute('data-theme',t);
+  document.body && document.body.setAttribute('data-theme',t);
+  if(m==='day') {
+    document.documentElement.setAttribute('data-mode','day');
+    document.body && document.body.setAttribute('data-mode','day');
+  }
+})();
+</script>
 </head>
 <body data-theme="blue">
 
 <canvas id="particles-bg"></canvas>
 <div id="toastContainer"></div>
 <!-- SPLASH COVER: hides content until Firebase auth resolves -->
-<div id="splashCover"></div>
+<div id="splashCover" style="position:fixed;inset:0;z-index:9000;background:var(--bg)"></div>
 
 
 
 <div class="container">
 
   <!-- ══ LOGIN ══ -->
-  <div id="loginWrapper" class="active">
+  <div id="loginWrapper">
     <div id="loginSection" class="ripple-surface">
       <div class="login-icon-badge">
         <span class="material-icons-round">admin_panel_settings</span>
@@ -1867,21 +1892,24 @@ onAuthStateChanged(auth, user => {
     if (name.toLowerCase() === 'anik555') name = 'ANiK555';
     userEmailBadge.textContent = name;
 
-    // Animate login out, app in
-    loginWrapper.classList.remove('active');
-    loginWrapper.style.opacity = '0';
-    loginWrapper.style.transform = 'scale(0.9)';
-    loginWrapper.style.transition = 'opacity 280ms ease-in, transform 280ms ease-in';
-    setTimeout(() => { loginWrapper.style.display = 'none'; }, 300);
+    // Ensure login is fully hidden — no flash
+    loginWrapper.classList.remove('active', 'login-animating');
 
+    // Show app section with spring animation
     appSection.classList.remove('hidden');
     appSection.style.opacity = '0';
-    appSection.style.transform = 'translateY(18px)';
+    appSection.style.transform = 'translateY(22px) scale(0.97)';
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        appSection.style.transition = 'opacity 350ms cubic-bezier(0.05,0.7,0.1,1), transform 400ms cubic-bezier(0.34,1.56,0.64,1)';
+        appSection.style.transition = 'opacity 380ms cubic-bezier(0.05,0.7,0.1,1), transform 450ms cubic-bezier(0.34,1.56,0.64,1)';
         appSection.style.opacity = '1';
         appSection.style.transform = 'none';
+        // Clean up inline styles after animation
+        setTimeout(() => {
+          appSection.style.transition = '';
+          appSection.style.opacity = '';
+          appSection.style.transform = '';
+        }, 500);
       });
     });
 
@@ -1890,17 +1918,23 @@ onAuthStateChanged(auth, user => {
     loadMetadata();
     removeSplash();
   } else {
+    // Logged out — hide app, show login WITH animation
     currentUserUid = null;
     appSection.classList.add('hidden');
     appSection.style.opacity = '';
     appSection.style.transform = '';
     appSection.style.transition = '';
-    loginWrapper.style.display = '';
-    loginWrapper.style.opacity = '';
-    loginWrapper.style.transform = '';
-    loginWrapper.style.transition = '';
-    loginWrapper.classList.add('active');
     btnAddNew.classList.add('hidden');
+
+    // Show login wrapper and trigger entrance animation
+    loginWrapper.classList.remove('login-animating'); // reset first
+    loginWrapper.classList.add('active');
+    // Force reflow, then add animation class
+    void loginWrapper.offsetWidth;
+    loginWrapper.classList.add('login-animating');
+    // Remove animation class after it completes (prevents re-fire on theme change etc)
+    setTimeout(() => loginWrapper.classList.remove('login-animating'), 800);
+
     removeSplash();
   }
 });
@@ -2157,11 +2191,8 @@ function escHtml(s) {
 /* ════════════════════════════════
    BODY LOADED CLASS (prevents flash)
 ════════════════════════════════ */
-requestAnimationFrame(() => {
-  requestAnimationFrame(() => {
-    document.body.classList.add('loaded');
-  });
-});
+// Add .loaded immediately (theme/mode already applied, transitions safe now)
+document.body.classList.add('loaded');
 
 /* ════════════════════════════════
    DELETE DIALOG (M3 Expressive)
